@@ -1,0 +1,94 @@
+app:
+  name: "shortvideo"
+  env: "dev"
+  version: "1.0.0"
+
+ports:
+  gateway: 8080
+  user: 8881
+  video: 8882
+  social: 8883
+  interaction: 8884
+  message: 8885
+  live: 8886
+  danmu: 8887
+  recommend: 8888
+
+services:
+  user:
+    timeout: "5s"
+  video:
+    timeout: "5s"
+  social:
+    timeout: "5s"
+  interaction:
+    timeout: "5s"
+  message:
+    timeout: "5s"
+  live:
+    timeout: "5s"
+  danmu:
+    timeout: "5s"
+  recommend:
+    timeout: "5s"
+
+database:
+  postgres:
+    host: "127.0.0.1"
+    port: 5432
+    user: "postgres"
+    password: "postgres"
+    dbname: "shortvideo"
+    sslmode: "disable"
+    max_open_conns: 100
+    max_idle_conns: 10
+    conn_max_lifetime: 3600
+
+redis:
+  host: "127.0.0.1"
+  port: 6379
+  password: ""
+  db: 0
+  pool_size: 10
+
+kafka:
+  brokers:
+    - "127.0.0.1:9092"
+  version: "2.8.0"
+  topics:
+    user: "user-events"
+    video: "video-events"
+    interaction: "interaction-events"
+    social: "social-events"
+
+elasticsearch:
+  url: "http://127.0.0.1:9200"
+  username: ""
+  password: ""
+
+minio:
+  endpoint: "127.0.0.1:9000"
+  access_key: "minioadmin"
+  secret_key: "minioadmin"
+  bucket: "shortvideo"
+  use_ssl: false
+
+log:
+  level: "info"
+  format: "console"
+  output: "stdout"
+  file_path: "./logs/app.log"
+
+jwt:
+  secret: "shortvideo-jwt-secret"
+  expire_hours: 168
+
+prometheus:
+  enable: true
+  port: 9090
+  path: "/metrics"
+
+tracing:
+  enable: false
+  jaeger_endpoint: "http://127.0.0.1:14268/api/traces"
+  sample_rate: 0.1
