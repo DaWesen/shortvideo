@@ -104,6 +104,10 @@ type TopicsConfig struct {
 	Video       string `mapstructure:"video"`
 	Interaction string `mapstructure:"interaction"`
 	Social      string `mapstructure:"social"`
+	Message     string `mapstructure:"message"`
+	Live        string `mapstructure:"live"`
+	Danmu       string `mapstructure:"danmu"`
+	Recommend   string `mapstructure:"recommend"`
 }
 
 // Elasticsearch配置
@@ -237,6 +241,10 @@ func setDefaults() {
 	viper.SetDefault("kafka.topics.video", "video-events")
 	viper.SetDefault("kafka.topics.interaction", "interaction-events")
 	viper.SetDefault("kafka.topics.social", "social-events")
+	viper.SetDefault("kafka.topics.message", "message-events")
+	viper.SetDefault("kafka.topics.live", "live-events")
+	viper.SetDefault("kafka.topics.danmu", "danmu-events")
+	viper.SetDefault("kafka.topics.recommend", "recommend-events")
 
 	viper.SetDefault("elasticsearch.url", "http://localhost:9200")
 	viper.SetDefault("elasticsearch.username", "")

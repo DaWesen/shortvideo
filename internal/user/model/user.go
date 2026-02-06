@@ -19,10 +19,3 @@ type User struct {
 func (User) TableName() string {
 	return "users"
 }
-
-type UserStats struct {
-	UserID             int64 `json:"user_id"`
-	VideoCount         int64 `json:"video_count"`
-	TotalLikesReceived int64 `json:"total_likes_received"`
-	TotalComments      int64 `json:"total_comments"`
-}

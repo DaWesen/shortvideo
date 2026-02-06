@@ -15,10 +15,3 @@ type Follow struct {
 func (Follow) TableName() string {
 	return "follows"
 }
-
-type FollowStats struct {
-	UserID        int64 `json:"user_id"`
-	FollowCount   int64 `json:"follow_count"`
-	FollowerCount int64 `json:"follower_count"`
-	FriendCount   int64 `json:"friend_count"`
-}

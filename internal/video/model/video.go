@@ -29,9 +29,3 @@ type VideoStats struct {
 	CommentCount int64 `json:"comment_count"`
 	ShareCount   int64 `json:"share_count"`
 }
-
-type TagInfo struct {
-	TagName    string `json:"tag_name"`
-	VideoCount int64  `json:"video_count"`
-	ViewCount  int64  `json:"view_count"`
-}

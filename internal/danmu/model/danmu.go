@@ -35,9 +35,7 @@ func (DanmuFilter) TableName() string {
 }
 
 type DanmuStats struct {
-	LiveID             int64            `json:"live_id"`
-	TotalDanmuCount    int64            `json:"total_danmu_count"`
-	ActiveUserCount    int64            `json:"active_user_count"`
-	PeakDanmuPerMinute int64            `json:"peak_danmu_per_minute"`
-	WordCloud          map[string]int64 `json:"word_cloud"`
+	LiveID          int64 `json:"live_id"`
+	TotalDanmuCount int64 `json:"total_danmu_count"`
+	ActiveUserCount int64 `json:"active_user_count"`
 }

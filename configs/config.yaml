@@ -60,6 +60,10 @@ kafka:
     video: "video-events"
     interaction: "interaction-events"
     social: "social-events"
+    message: "message-events"
+    live: "live-events"
+    danmu: "danmu-events"
+    recommend: "recommend-events"
 
 elasticsearch:
   url: "http://127.0.0.1:9200"
