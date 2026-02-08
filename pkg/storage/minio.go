@@ -56,29 +56,38 @@ var (
 
 func NewMinioStorage() Storage {
 	storageOnce.Do(func() {
-		minioConfig := config.Get().Minio
-		storageInstance = &MinioStorage{
-			endpoint:  minioConfig.Endpoint,
-			bucket:    minioConfig.Bucket,
-			useSSL:    minioConfig.UseSSL,
-			accessKey: minioConfig.AccessKey,
-			secretKey: minioConfig.SecretKey,
-		}
-
-		var err error
-		storageInstance.client, err = storageInstance.initClient()
-		if err != nil {
-			log.Printf("初始化MinIO客户端失败: %v", err)
-			return
-		}
-
-		storageInstance.baseURL = storageInstance.buildBaseURL()
-
-		if err := storageInstance.CreateBucket(context.Background(), minioConfig.Bucket); err != nil {
-			log.Printf("创建MinIO桶失败: %v", err)
+		cfg := config.Get()
+		storage, _ := InitMinio(cfg.Minio)
+		if s, ok := storage.(*MinioStorage); ok {
+			storageInstance = s
 		}
 	})
 	return storageInstance
+}
+
+func InitMinio(minioConfig config.MinioConfig) (Storage, error) {
+	storage := &MinioStorage{
+		endpoint:  minioConfig.Endpoint,
+		bucket:    minioConfig.Bucket,
+		useSSL:    minioConfig.UseSSL,
+		accessKey: minioConfig.AccessKey,
+		secretKey: minioConfig.SecretKey,
+	}
+
+	var err error
+	storage.client, err = storage.initClient()
+	if err != nil {
+		log.Printf("初始化MinIO客户端失败: %v", err)
+		return nil, err
+	}
+
+	storage.baseURL = storage.buildBaseURL()
+
+	if err := storage.CreateBucket(context.Background(), minioConfig.Bucket); err != nil {
+		log.Printf("创建MinIO桶失败: %v", err)
+	}
+
+	return storage, nil
 }
 
 func (s *MinioStorage) initClient() (*minio.Client, error) {

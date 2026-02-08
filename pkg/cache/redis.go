@@ -68,20 +68,41 @@ var (
 
 func NewRedisCache() Cache {
 	cacheOnce.Do(func() {
-		cacheInstance = &RedisCache{
-			client: initRedisClient(),
-		}
+		cfg := config.Get()
+		cacheInstance, _ = InitRedis(cfg.Redis)
 	})
 	return cacheInstance
 }
 
-func initRedisClient() *redis.Client {
-	redisConfig := config.Get().Redis
+func InitRedis(redisConfig config.RedisConfig) (Cache, error) {
 	client := redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%d", redisConfig.Host, redisConfig.Port),
 		Password: redisConfig.Password,
 		DB:       redisConfig.DB,
 		PoolSize: redisConfig.PoolSize,
+	})
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	_, err := client.Ping(ctx).Result()
+	if err != nil {
+		fmt.Printf("Redis连接失败: %v\n", err)
+		return nil, err
+	} else {
+		fmt.Println("Redis连接成功")
+	}
+
+	return &RedisCache{client: client}, nil
+}
+
+func initRedisClient() *redis.Client {
+	cfg := config.Get()
+	client := redis.NewClient(&redis.Options{
+		Addr:     fmt.Sprintf("%s:%d", cfg.Redis.Host, cfg.Redis.Port),
+		Password: cfg.Redis.Password,
+		DB:       cfg.Redis.DB,
+		PoolSize: cfg.Redis.PoolSize,
 	})
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

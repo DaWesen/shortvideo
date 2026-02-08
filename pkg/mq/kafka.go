@@ -37,16 +37,21 @@ var (
 func NewProducer() *Producer {
 	producerOnce.Do(func() {
 		kafkaConfig := config.Get().Kafka
-		producerInstance = &Producer{
-			writer: &kafka.Writer{
-				Addr:         kafka.TCP(kafkaConfig.Brokers...),
-				Balancer:     &kafka.LeastBytes{},
-				WriteTimeout: 10 * time.Second,
-				ReadTimeout:  10 * time.Second,
-			},
-		}
+		producerInstance, _ = InitProducer(kafkaConfig.Brokers, kafkaConfig.Version)
 	})
 	return producerInstance
+}
+
+func InitProducer(brokers []string, version string) (*Producer, error) {
+	producer := &Producer{
+		writer: &kafka.Writer{
+			Addr:         kafka.TCP(brokers...),
+			Balancer:     &kafka.LeastBytes{},
+			WriteTimeout: 10 * time.Second,
+			ReadTimeout:  10 * time.Second,
+		},
+	}
+	return producer, nil
 }
 
 func NewConsumer(topic string, groupID string) *Consumer {

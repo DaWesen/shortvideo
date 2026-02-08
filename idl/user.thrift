@@ -71,15 +71,62 @@ struct UserStats{
 struct UserStatsResp{
     1:common.BaseResp BaseResp
     2:UserStats stats
+    3:i64 totalUserCount
+}
+
+struct UserInfoByUsernameReq{
+    1:string username
+}
+
+struct UpdateAvatarReq{
+    1:i64 userId
+    2:binary avatarData
+}
+
+struct BatchCheckUsernamesReq{
+    1:list<string> usernames
+}
+
+struct BatchCheckUsernamesResp{
+    1:common.BaseResp BaseResp
+    2:map<string,bool> availableMap
+}
+
+struct SearchUsersReq{
+    1:string keyword
+    2:i32 page
+    3:i32 pageSize
+}
+
+struct SearchUsersResp{
+    1:common.BaseResp BaseResp
+    2:list<common.User> users
+    3:i64 total
+}
+
+struct UpdateFollowCountReq{
+    1:i64 userId
+    2:i64 delta
+}
+
+struct UpdateFollowerCountReq{
+    1:i64 userId
+    2:i64 delta
 }
 
 service UserService{
     LoginRegisterResp Register(1:RegisterReq req)
     LoginRegisterResp Login(1:LoginReq req)
     UserInfoResp GetUserInfo(1:UserInfoReq req)
+    UserInfoResp GetUserInfoByUsername(1:UserInfoByUsernameReq req)
     BatchUserInfoResp BatchGetUserInfo(1:BatchUserInfoReq req)
     common.BaseResp UpdateUser(1:UpdateUserReq req)
+    common.BaseResp UpdateAvatar(1:UpdateAvatarReq req)
     CheckUsernameResp CheckUsername(1:CheckUsernameReq req)
+    BatchCheckUsernamesResp BatchCheckUsernames(1:BatchCheckUsernamesReq req)
     UserStatsResp GetUserStats(1:UserStatsReq req)
+    SearchUsersResp SearchUsers(1:SearchUsersReq req)
+    common.BaseResp UpdateFollowCount(1:UpdateFollowCountReq req)
+    common.BaseResp UpdateFollowerCount(1:UpdateFollowerCountReq req)
     bool VerifyToken(1:string token)
 }

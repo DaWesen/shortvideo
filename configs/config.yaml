@@ -13,6 +13,7 @@ ports:
   live: 8886
   danmu: 8887
   recommend: 8888
+  websocket: 8889
 
 services:
   user:
@@ -31,6 +32,12 @@ services:
     timeout: "5s"
   recommend:
     timeout: "5s"
+  websocket:
+    timeout: "30s"
+    max_connections: 10000
+    ping_interval: "30s"
+    write_wait: "10s"
+    pong_wait: "60s"
 
 database:
   postgres:
@@ -96,3 +103,10 @@ tracing:
   enable: false
   jaeger_endpoint: "http://127.0.0.1:14268/api/traces"
   sample_rate: 0.1
+
+websocket:
+  enable: true
+  path: "/ws"
+  allow_origins:
+    - "*"
+  buffer_size: 4096

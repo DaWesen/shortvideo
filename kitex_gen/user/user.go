@@ -627,8 +627,9 @@ var fieldIDToName_UserStats = map[int16]string{
 }
 
 type UserStatsResp struct {
-	BaseResp *common.BaseResp `thrift:"BaseResp,1" frugal:"1,default,common.BaseResp" json:"BaseResp"`
-	Stats    *UserStats       `thrift:"stats,2" frugal:"2,default,UserStats" json:"stats"`
+	BaseResp       *common.BaseResp `thrift:"BaseResp,1" frugal:"1,default,common.BaseResp" json:"BaseResp"`
+	Stats          *UserStats       `thrift:"stats,2" frugal:"2,default,UserStats" json:"stats"`
+	TotalUserCount int64            `thrift:"totalUserCount,3" frugal:"3,default,i64" json:"totalUserCount"`
 }
 
 func NewUserStatsResp() *UserStatsResp {
@@ -655,11 +656,18 @@ func (p *UserStatsResp) GetStats() (v *UserStats) {
 	}
 	return p.Stats
 }
+
+func (p *UserStatsResp) GetTotalUserCount() (v int64) {
+	return p.TotalUserCount
+}
 func (p *UserStatsResp) SetBaseResp(val *common.BaseResp) {
 	p.BaseResp = val
 }
 func (p *UserStatsResp) SetStats(val *UserStats) {
 	p.Stats = val
+}
+func (p *UserStatsResp) SetTotalUserCount(val int64) {
+	p.TotalUserCount = val
 }
 
 func (p *UserStatsResp) IsSetBaseResp() bool {
@@ -680,6 +688,329 @@ func (p *UserStatsResp) String() string {
 var fieldIDToName_UserStatsResp = map[int16]string{
 	1: "BaseResp",
 	2: "stats",
+	3: "totalUserCount",
+}
+
+type UserInfoByUsernameReq struct {
+	Username string `thrift:"username,1" frugal:"1,default,string" json:"username"`
+}
+
+func NewUserInfoByUsernameReq() *UserInfoByUsernameReq {
+	return &UserInfoByUsernameReq{}
+}
+
+func (p *UserInfoByUsernameReq) InitDefault() {
+}
+
+func (p *UserInfoByUsernameReq) GetUsername() (v string) {
+	return p.Username
+}
+func (p *UserInfoByUsernameReq) SetUsername(val string) {
+	p.Username = val
+}
+
+func (p *UserInfoByUsernameReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserInfoByUsernameReq(%+v)", *p)
+}
+
+var fieldIDToName_UserInfoByUsernameReq = map[int16]string{
+	1: "username",
+}
+
+type UpdateAvatarReq struct {
+	UserId     int64  `thrift:"userId,1" frugal:"1,default,i64" json:"userId"`
+	AvatarData []byte `thrift:"avatarData,2" frugal:"2,default,binary" json:"avatarData"`
+}
+
+func NewUpdateAvatarReq() *UpdateAvatarReq {
+	return &UpdateAvatarReq{}
+}
+
+func (p *UpdateAvatarReq) InitDefault() {
+}
+
+func (p *UpdateAvatarReq) GetUserId() (v int64) {
+	return p.UserId
+}
+
+func (p *UpdateAvatarReq) GetAvatarData() (v []byte) {
+	return p.AvatarData
+}
+func (p *UpdateAvatarReq) SetUserId(val int64) {
+	p.UserId = val
+}
+func (p *UpdateAvatarReq) SetAvatarData(val []byte) {
+	p.AvatarData = val
+}
+
+func (p *UpdateAvatarReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UpdateAvatarReq(%+v)", *p)
+}
+
+var fieldIDToName_UpdateAvatarReq = map[int16]string{
+	1: "userId",
+	2: "avatarData",
+}
+
+type BatchCheckUsernamesReq struct {
+	Usernames []string `thrift:"usernames,1" frugal:"1,default,list<string>" json:"usernames"`
+}
+
+func NewBatchCheckUsernamesReq() *BatchCheckUsernamesReq {
+	return &BatchCheckUsernamesReq{}
+}
+
+func (p *BatchCheckUsernamesReq) InitDefault() {
+}
+
+func (p *BatchCheckUsernamesReq) GetUsernames() (v []string) {
+	return p.Usernames
+}
+func (p *BatchCheckUsernamesReq) SetUsernames(val []string) {
+	p.Usernames = val
+}
+
+func (p *BatchCheckUsernamesReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("BatchCheckUsernamesReq(%+v)", *p)
+}
+
+var fieldIDToName_BatchCheckUsernamesReq = map[int16]string{
+	1: "usernames",
+}
+
+type BatchCheckUsernamesResp struct {
+	BaseResp     *common.BaseResp `thrift:"BaseResp,1" frugal:"1,default,common.BaseResp" json:"BaseResp"`
+	AvailableMap map[string]bool  `thrift:"availableMap,2" frugal:"2,default,map<string:bool>" json:"availableMap"`
+}
+
+func NewBatchCheckUsernamesResp() *BatchCheckUsernamesResp {
+	return &BatchCheckUsernamesResp{}
+}
+
+func (p *BatchCheckUsernamesResp) InitDefault() {
+}
+
+var BatchCheckUsernamesResp_BaseResp_DEFAULT *common.BaseResp
+
+func (p *BatchCheckUsernamesResp) GetBaseResp() (v *common.BaseResp) {
+	if !p.IsSetBaseResp() {
+		return BatchCheckUsernamesResp_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
+func (p *BatchCheckUsernamesResp) GetAvailableMap() (v map[string]bool) {
+	return p.AvailableMap
+}
+func (p *BatchCheckUsernamesResp) SetBaseResp(val *common.BaseResp) {
+	p.BaseResp = val
+}
+func (p *BatchCheckUsernamesResp) SetAvailableMap(val map[string]bool) {
+	p.AvailableMap = val
+}
+
+func (p *BatchCheckUsernamesResp) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *BatchCheckUsernamesResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("BatchCheckUsernamesResp(%+v)", *p)
+}
+
+var fieldIDToName_BatchCheckUsernamesResp = map[int16]string{
+	1: "BaseResp",
+	2: "availableMap",
+}
+
+type SearchUsersReq struct {
+	Keyword  string `thrift:"keyword,1" frugal:"1,default,string" json:"keyword"`
+	Page     int32  `thrift:"page,2" frugal:"2,default,i32" json:"page"`
+	PageSize int32  `thrift:"pageSize,3" frugal:"3,default,i32" json:"pageSize"`
+}
+
+func NewSearchUsersReq() *SearchUsersReq {
+	return &SearchUsersReq{}
+}
+
+func (p *SearchUsersReq) InitDefault() {
+}
+
+func (p *SearchUsersReq) GetKeyword() (v string) {
+	return p.Keyword
+}
+
+func (p *SearchUsersReq) GetPage() (v int32) {
+	return p.Page
+}
+
+func (p *SearchUsersReq) GetPageSize() (v int32) {
+	return p.PageSize
+}
+func (p *SearchUsersReq) SetKeyword(val string) {
+	p.Keyword = val
+}
+func (p *SearchUsersReq) SetPage(val int32) {
+	p.Page = val
+}
+func (p *SearchUsersReq) SetPageSize(val int32) {
+	p.PageSize = val
+}
+
+func (p *SearchUsersReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SearchUsersReq(%+v)", *p)
+}
+
+var fieldIDToName_SearchUsersReq = map[int16]string{
+	1: "keyword",
+	2: "page",
+	3: "pageSize",
+}
+
+type SearchUsersResp struct {
+	BaseResp *common.BaseResp `thrift:"BaseResp,1" frugal:"1,default,common.BaseResp" json:"BaseResp"`
+	Users    []*common.User   `thrift:"users,2" frugal:"2,default,list<common.User>" json:"users"`
+	Total    int64            `thrift:"total,3" frugal:"3,default,i64" json:"total"`
+}
+
+func NewSearchUsersResp() *SearchUsersResp {
+	return &SearchUsersResp{}
+}
+
+func (p *SearchUsersResp) InitDefault() {
+}
+
+var SearchUsersResp_BaseResp_DEFAULT *common.BaseResp
+
+func (p *SearchUsersResp) GetBaseResp() (v *common.BaseResp) {
+	if !p.IsSetBaseResp() {
+		return SearchUsersResp_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
+func (p *SearchUsersResp) GetUsers() (v []*common.User) {
+	return p.Users
+}
+
+func (p *SearchUsersResp) GetTotal() (v int64) {
+	return p.Total
+}
+func (p *SearchUsersResp) SetBaseResp(val *common.BaseResp) {
+	p.BaseResp = val
+}
+func (p *SearchUsersResp) SetUsers(val []*common.User) {
+	p.Users = val
+}
+func (p *SearchUsersResp) SetTotal(val int64) {
+	p.Total = val
+}
+
+func (p *SearchUsersResp) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *SearchUsersResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SearchUsersResp(%+v)", *p)
+}
+
+var fieldIDToName_SearchUsersResp = map[int16]string{
+	1: "BaseResp",
+	2: "users",
+	3: "total",
+}
+
+type UpdateFollowCountReq struct {
+	UserId int64 `thrift:"userId,1" frugal:"1,default,i64" json:"userId"`
+	Delta  int64 `thrift:"delta,2" frugal:"2,default,i64" json:"delta"`
+}
+
+func NewUpdateFollowCountReq() *UpdateFollowCountReq {
+	return &UpdateFollowCountReq{}
+}
+
+func (p *UpdateFollowCountReq) InitDefault() {
+}
+
+func (p *UpdateFollowCountReq) GetUserId() (v int64) {
+	return p.UserId
+}
+
+func (p *UpdateFollowCountReq) GetDelta() (v int64) {
+	return p.Delta
+}
+func (p *UpdateFollowCountReq) SetUserId(val int64) {
+	p.UserId = val
+}
+func (p *UpdateFollowCountReq) SetDelta(val int64) {
+	p.Delta = val
+}
+
+func (p *UpdateFollowCountReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UpdateFollowCountReq(%+v)", *p)
+}
+
+var fieldIDToName_UpdateFollowCountReq = map[int16]string{
+	1: "userId",
+	2: "delta",
+}
+
+type UpdateFollowerCountReq struct {
+	UserId int64 `thrift:"userId,1" frugal:"1,default,i64" json:"userId"`
+	Delta  int64 `thrift:"delta,2" frugal:"2,default,i64" json:"delta"`
+}
+
+func NewUpdateFollowerCountReq() *UpdateFollowerCountReq {
+	return &UpdateFollowerCountReq{}
+}
+
+func (p *UpdateFollowerCountReq) InitDefault() {
+}
+
+func (p *UpdateFollowerCountReq) GetUserId() (v int64) {
+	return p.UserId
+}
+
+func (p *UpdateFollowerCountReq) GetDelta() (v int64) {
+	return p.Delta
+}
+func (p *UpdateFollowerCountReq) SetUserId(val int64) {
+	p.UserId = val
+}
+func (p *UpdateFollowerCountReq) SetDelta(val int64) {
+	p.Delta = val
+}
+
+func (p *UpdateFollowerCountReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UpdateFollowerCountReq(%+v)", *p)
+}
+
+var fieldIDToName_UpdateFollowerCountReq = map[int16]string{
+	1: "userId",
+	2: "delta",
 }
 
 type UserService interface {
@@ -689,13 +1020,25 @@ type UserService interface {
 
 	GetUserInfo(ctx context.Context, req *UserInfoReq) (r *UserInfoResp, err error)
 
+	GetUserInfoByUsername(ctx context.Context, req *UserInfoByUsernameReq) (r *UserInfoResp, err error)
+
 	BatchGetUserInfo(ctx context.Context, req *BatchUserInfoReq) (r *BatchUserInfoResp, err error)
 
 	UpdateUser(ctx context.Context, req *UpdateUserReq) (r *common.BaseResp, err error)
 
+	UpdateAvatar(ctx context.Context, req *UpdateAvatarReq) (r *common.BaseResp, err error)
+
 	CheckUsername(ctx context.Context, req *CheckUsernameReq) (r *CheckUsernameResp, err error)
 
+	BatchCheckUsernames(ctx context.Context, req *BatchCheckUsernamesReq) (r *BatchCheckUsernamesResp, err error)
+
 	GetUserStats(ctx context.Context, req *UserStatsReq) (r *UserStatsResp, err error)
+
+	SearchUsers(ctx context.Context, req *SearchUsersReq) (r *SearchUsersResp, err error)
+
+	UpdateFollowCount(ctx context.Context, req *UpdateFollowCountReq) (r *common.BaseResp, err error)
+
+	UpdateFollowerCount(ctx context.Context, req *UpdateFollowerCountReq) (r *common.BaseResp, err error)
 
 	VerifyToken(ctx context.Context, token string) (r bool, err error)
 }
@@ -928,6 +1271,82 @@ var fieldIDToName_UserServiceGetUserInfoResult = map[int16]string{
 	0: "success",
 }
 
+type UserServiceGetUserInfoByUsernameArgs struct {
+	Req *UserInfoByUsernameReq `thrift:"req,1" frugal:"1,default,UserInfoByUsernameReq" json:"req"`
+}
+
+func NewUserServiceGetUserInfoByUsernameArgs() *UserServiceGetUserInfoByUsernameArgs {
+	return &UserServiceGetUserInfoByUsernameArgs{}
+}
+
+func (p *UserServiceGetUserInfoByUsernameArgs) InitDefault() {
+}
+
+var UserServiceGetUserInfoByUsernameArgs_Req_DEFAULT *UserInfoByUsernameReq
+
+func (p *UserServiceGetUserInfoByUsernameArgs) GetReq() (v *UserInfoByUsernameReq) {
+	if !p.IsSetReq() {
+		return UserServiceGetUserInfoByUsernameArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *UserServiceGetUserInfoByUsernameArgs) SetReq(val *UserInfoByUsernameReq) {
+	p.Req = val
+}
+
+func (p *UserServiceGetUserInfoByUsernameArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *UserServiceGetUserInfoByUsernameArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserServiceGetUserInfoByUsernameArgs(%+v)", *p)
+}
+
+var fieldIDToName_UserServiceGetUserInfoByUsernameArgs = map[int16]string{
+	1: "req",
+}
+
+type UserServiceGetUserInfoByUsernameResult struct {
+	Success *UserInfoResp `thrift:"success,0,optional" frugal:"0,optional,UserInfoResp" json:"success,omitempty"`
+}
+
+func NewUserServiceGetUserInfoByUsernameResult() *UserServiceGetUserInfoByUsernameResult {
+	return &UserServiceGetUserInfoByUsernameResult{}
+}
+
+func (p *UserServiceGetUserInfoByUsernameResult) InitDefault() {
+}
+
+var UserServiceGetUserInfoByUsernameResult_Success_DEFAULT *UserInfoResp
+
+func (p *UserServiceGetUserInfoByUsernameResult) GetSuccess() (v *UserInfoResp) {
+	if !p.IsSetSuccess() {
+		return UserServiceGetUserInfoByUsernameResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *UserServiceGetUserInfoByUsernameResult) SetSuccess(x interface{}) {
+	p.Success = x.(*UserInfoResp)
+}
+
+func (p *UserServiceGetUserInfoByUsernameResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *UserServiceGetUserInfoByUsernameResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserServiceGetUserInfoByUsernameResult(%+v)", *p)
+}
+
+var fieldIDToName_UserServiceGetUserInfoByUsernameResult = map[int16]string{
+	0: "success",
+}
+
 type UserServiceBatchGetUserInfoArgs struct {
 	Req *BatchUserInfoReq `thrift:"req,1" frugal:"1,default,BatchUserInfoReq" json:"req"`
 }
@@ -1080,6 +1499,82 @@ var fieldIDToName_UserServiceUpdateUserResult = map[int16]string{
 	0: "success",
 }
 
+type UserServiceUpdateAvatarArgs struct {
+	Req *UpdateAvatarReq `thrift:"req,1" frugal:"1,default,UpdateAvatarReq" json:"req"`
+}
+
+func NewUserServiceUpdateAvatarArgs() *UserServiceUpdateAvatarArgs {
+	return &UserServiceUpdateAvatarArgs{}
+}
+
+func (p *UserServiceUpdateAvatarArgs) InitDefault() {
+}
+
+var UserServiceUpdateAvatarArgs_Req_DEFAULT *UpdateAvatarReq
+
+func (p *UserServiceUpdateAvatarArgs) GetReq() (v *UpdateAvatarReq) {
+	if !p.IsSetReq() {
+		return UserServiceUpdateAvatarArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *UserServiceUpdateAvatarArgs) SetReq(val *UpdateAvatarReq) {
+	p.Req = val
+}
+
+func (p *UserServiceUpdateAvatarArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *UserServiceUpdateAvatarArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserServiceUpdateAvatarArgs(%+v)", *p)
+}
+
+var fieldIDToName_UserServiceUpdateAvatarArgs = map[int16]string{
+	1: "req",
+}
+
+type UserServiceUpdateAvatarResult struct {
+	Success *common.BaseResp `thrift:"success,0,optional" frugal:"0,optional,common.BaseResp" json:"success,omitempty"`
+}
+
+func NewUserServiceUpdateAvatarResult() *UserServiceUpdateAvatarResult {
+	return &UserServiceUpdateAvatarResult{}
+}
+
+func (p *UserServiceUpdateAvatarResult) InitDefault() {
+}
+
+var UserServiceUpdateAvatarResult_Success_DEFAULT *common.BaseResp
+
+func (p *UserServiceUpdateAvatarResult) GetSuccess() (v *common.BaseResp) {
+	if !p.IsSetSuccess() {
+		return UserServiceUpdateAvatarResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *UserServiceUpdateAvatarResult) SetSuccess(x interface{}) {
+	p.Success = x.(*common.BaseResp)
+}
+
+func (p *UserServiceUpdateAvatarResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *UserServiceUpdateAvatarResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserServiceUpdateAvatarResult(%+v)", *p)
+}
+
+var fieldIDToName_UserServiceUpdateAvatarResult = map[int16]string{
+	0: "success",
+}
+
 type UserServiceCheckUsernameArgs struct {
 	Req *CheckUsernameReq `thrift:"req,1" frugal:"1,default,CheckUsernameReq" json:"req"`
 }
@@ -1156,6 +1651,82 @@ var fieldIDToName_UserServiceCheckUsernameResult = map[int16]string{
 	0: "success",
 }
 
+type UserServiceBatchCheckUsernamesArgs struct {
+	Req *BatchCheckUsernamesReq `thrift:"req,1" frugal:"1,default,BatchCheckUsernamesReq" json:"req"`
+}
+
+func NewUserServiceBatchCheckUsernamesArgs() *UserServiceBatchCheckUsernamesArgs {
+	return &UserServiceBatchCheckUsernamesArgs{}
+}
+
+func (p *UserServiceBatchCheckUsernamesArgs) InitDefault() {
+}
+
+var UserServiceBatchCheckUsernamesArgs_Req_DEFAULT *BatchCheckUsernamesReq
+
+func (p *UserServiceBatchCheckUsernamesArgs) GetReq() (v *BatchCheckUsernamesReq) {
+	if !p.IsSetReq() {
+		return UserServiceBatchCheckUsernamesArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *UserServiceBatchCheckUsernamesArgs) SetReq(val *BatchCheckUsernamesReq) {
+	p.Req = val
+}
+
+func (p *UserServiceBatchCheckUsernamesArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *UserServiceBatchCheckUsernamesArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserServiceBatchCheckUsernamesArgs(%+v)", *p)
+}
+
+var fieldIDToName_UserServiceBatchCheckUsernamesArgs = map[int16]string{
+	1: "req",
+}
+
+type UserServiceBatchCheckUsernamesResult struct {
+	Success *BatchCheckUsernamesResp `thrift:"success,0,optional" frugal:"0,optional,BatchCheckUsernamesResp" json:"success,omitempty"`
+}
+
+func NewUserServiceBatchCheckUsernamesResult() *UserServiceBatchCheckUsernamesResult {
+	return &UserServiceBatchCheckUsernamesResult{}
+}
+
+func (p *UserServiceBatchCheckUsernamesResult) InitDefault() {
+}
+
+var UserServiceBatchCheckUsernamesResult_Success_DEFAULT *BatchCheckUsernamesResp
+
+func (p *UserServiceBatchCheckUsernamesResult) GetSuccess() (v *BatchCheckUsernamesResp) {
+	if !p.IsSetSuccess() {
+		return UserServiceBatchCheckUsernamesResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *UserServiceBatchCheckUsernamesResult) SetSuccess(x interface{}) {
+	p.Success = x.(*BatchCheckUsernamesResp)
+}
+
+func (p *UserServiceBatchCheckUsernamesResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *UserServiceBatchCheckUsernamesResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserServiceBatchCheckUsernamesResult(%+v)", *p)
+}
+
+var fieldIDToName_UserServiceBatchCheckUsernamesResult = map[int16]string{
+	0: "success",
+}
+
 type UserServiceGetUserStatsArgs struct {
 	Req *UserStatsReq `thrift:"req,1" frugal:"1,default,UserStatsReq" json:"req"`
 }
@@ -1229,6 +1800,234 @@ func (p *UserServiceGetUserStatsResult) String() string {
 }
 
 var fieldIDToName_UserServiceGetUserStatsResult = map[int16]string{
+	0: "success",
+}
+
+type UserServiceSearchUsersArgs struct {
+	Req *SearchUsersReq `thrift:"req,1" frugal:"1,default,SearchUsersReq" json:"req"`
+}
+
+func NewUserServiceSearchUsersArgs() *UserServiceSearchUsersArgs {
+	return &UserServiceSearchUsersArgs{}
+}
+
+func (p *UserServiceSearchUsersArgs) InitDefault() {
+}
+
+var UserServiceSearchUsersArgs_Req_DEFAULT *SearchUsersReq
+
+func (p *UserServiceSearchUsersArgs) GetReq() (v *SearchUsersReq) {
+	if !p.IsSetReq() {
+		return UserServiceSearchUsersArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *UserServiceSearchUsersArgs) SetReq(val *SearchUsersReq) {
+	p.Req = val
+}
+
+func (p *UserServiceSearchUsersArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *UserServiceSearchUsersArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserServiceSearchUsersArgs(%+v)", *p)
+}
+
+var fieldIDToName_UserServiceSearchUsersArgs = map[int16]string{
+	1: "req",
+}
+
+type UserServiceSearchUsersResult struct {
+	Success *SearchUsersResp `thrift:"success,0,optional" frugal:"0,optional,SearchUsersResp" json:"success,omitempty"`
+}
+
+func NewUserServiceSearchUsersResult() *UserServiceSearchUsersResult {
+	return &UserServiceSearchUsersResult{}
+}
+
+func (p *UserServiceSearchUsersResult) InitDefault() {
+}
+
+var UserServiceSearchUsersResult_Success_DEFAULT *SearchUsersResp
+
+func (p *UserServiceSearchUsersResult) GetSuccess() (v *SearchUsersResp) {
+	if !p.IsSetSuccess() {
+		return UserServiceSearchUsersResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *UserServiceSearchUsersResult) SetSuccess(x interface{}) {
+	p.Success = x.(*SearchUsersResp)
+}
+
+func (p *UserServiceSearchUsersResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *UserServiceSearchUsersResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserServiceSearchUsersResult(%+v)", *p)
+}
+
+var fieldIDToName_UserServiceSearchUsersResult = map[int16]string{
+	0: "success",
+}
+
+type UserServiceUpdateFollowCountArgs struct {
+	Req *UpdateFollowCountReq `thrift:"req,1" frugal:"1,default,UpdateFollowCountReq" json:"req"`
+}
+
+func NewUserServiceUpdateFollowCountArgs() *UserServiceUpdateFollowCountArgs {
+	return &UserServiceUpdateFollowCountArgs{}
+}
+
+func (p *UserServiceUpdateFollowCountArgs) InitDefault() {
+}
+
+var UserServiceUpdateFollowCountArgs_Req_DEFAULT *UpdateFollowCountReq
+
+func (p *UserServiceUpdateFollowCountArgs) GetReq() (v *UpdateFollowCountReq) {
+	if !p.IsSetReq() {
+		return UserServiceUpdateFollowCountArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *UserServiceUpdateFollowCountArgs) SetReq(val *UpdateFollowCountReq) {
+	p.Req = val
+}
+
+func (p *UserServiceUpdateFollowCountArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *UserServiceUpdateFollowCountArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserServiceUpdateFollowCountArgs(%+v)", *p)
+}
+
+var fieldIDToName_UserServiceUpdateFollowCountArgs = map[int16]string{
+	1: "req",
+}
+
+type UserServiceUpdateFollowCountResult struct {
+	Success *common.BaseResp `thrift:"success,0,optional" frugal:"0,optional,common.BaseResp" json:"success,omitempty"`
+}
+
+func NewUserServiceUpdateFollowCountResult() *UserServiceUpdateFollowCountResult {
+	return &UserServiceUpdateFollowCountResult{}
+}
+
+func (p *UserServiceUpdateFollowCountResult) InitDefault() {
+}
+
+var UserServiceUpdateFollowCountResult_Success_DEFAULT *common.BaseResp
+
+func (p *UserServiceUpdateFollowCountResult) GetSuccess() (v *common.BaseResp) {
+	if !p.IsSetSuccess() {
+		return UserServiceUpdateFollowCountResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *UserServiceUpdateFollowCountResult) SetSuccess(x interface{}) {
+	p.Success = x.(*common.BaseResp)
+}
+
+func (p *UserServiceUpdateFollowCountResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *UserServiceUpdateFollowCountResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserServiceUpdateFollowCountResult(%+v)", *p)
+}
+
+var fieldIDToName_UserServiceUpdateFollowCountResult = map[int16]string{
+	0: "success",
+}
+
+type UserServiceUpdateFollowerCountArgs struct {
+	Req *UpdateFollowerCountReq `thrift:"req,1" frugal:"1,default,UpdateFollowerCountReq" json:"req"`
+}
+
+func NewUserServiceUpdateFollowerCountArgs() *UserServiceUpdateFollowerCountArgs {
+	return &UserServiceUpdateFollowerCountArgs{}
+}
+
+func (p *UserServiceUpdateFollowerCountArgs) InitDefault() {
+}
+
+var UserServiceUpdateFollowerCountArgs_Req_DEFAULT *UpdateFollowerCountReq
+
+func (p *UserServiceUpdateFollowerCountArgs) GetReq() (v *UpdateFollowerCountReq) {
+	if !p.IsSetReq() {
+		return UserServiceUpdateFollowerCountArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *UserServiceUpdateFollowerCountArgs) SetReq(val *UpdateFollowerCountReq) {
+	p.Req = val
+}
+
+func (p *UserServiceUpdateFollowerCountArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *UserServiceUpdateFollowerCountArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserServiceUpdateFollowerCountArgs(%+v)", *p)
+}
+
+var fieldIDToName_UserServiceUpdateFollowerCountArgs = map[int16]string{
+	1: "req",
+}
+
+type UserServiceUpdateFollowerCountResult struct {
+	Success *common.BaseResp `thrift:"success,0,optional" frugal:"0,optional,common.BaseResp" json:"success,omitempty"`
+}
+
+func NewUserServiceUpdateFollowerCountResult() *UserServiceUpdateFollowerCountResult {
+	return &UserServiceUpdateFollowerCountResult{}
+}
+
+func (p *UserServiceUpdateFollowerCountResult) InitDefault() {
+}
+
+var UserServiceUpdateFollowerCountResult_Success_DEFAULT *common.BaseResp
+
+func (p *UserServiceUpdateFollowerCountResult) GetSuccess() (v *common.BaseResp) {
+	if !p.IsSetSuccess() {
+		return UserServiceUpdateFollowerCountResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *UserServiceUpdateFollowerCountResult) SetSuccess(x interface{}) {
+	p.Success = x.(*common.BaseResp)
+}
+
+func (p *UserServiceUpdateFollowerCountResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *UserServiceUpdateFollowerCountResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UserServiceUpdateFollowerCountResult(%+v)", *p)
+}
+
+var fieldIDToName_UserServiceUpdateFollowerCountResult = map[int16]string{
 	0: "success",
 }
 

@@ -22,10 +22,7 @@ type JWTManager struct {
 
 func NewJWTManager() *JWTManager {
 	jwtConfig := config.Get().JWT
-	return &JWTManager{
-		secretKey:   jwtConfig.Secret,
-		expireHours: jwtConfig.ExpireHours,
-	}
+	return NewJWTManagerWithConfig(jwtConfig.Secret, jwtConfig.ExpireHours)
 }
 
 func NewJWTManagerWithConfig(secretKey string, expireHours int) *JWTManager {

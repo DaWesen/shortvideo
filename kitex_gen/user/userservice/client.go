@@ -15,10 +15,16 @@ type Client interface {
 	Register(ctx context.Context, req *user.RegisterReq, callOptions ...callopt.Option) (r *user.LoginRegisterResp, err error)
 	Login(ctx context.Context, req *user.LoginReq, callOptions ...callopt.Option) (r *user.LoginRegisterResp, err error)
 	GetUserInfo(ctx context.Context, req *user.UserInfoReq, callOptions ...callopt.Option) (r *user.UserInfoResp, err error)
+	GetUserInfoByUsername(ctx context.Context, req *user.UserInfoByUsernameReq, callOptions ...callopt.Option) (r *user.UserInfoResp, err error)
 	BatchGetUserInfo(ctx context.Context, req *user.BatchUserInfoReq, callOptions ...callopt.Option) (r *user.BatchUserInfoResp, err error)
 	UpdateUser(ctx context.Context, req *user.UpdateUserReq, callOptions ...callopt.Option) (r *common.BaseResp, err error)
+	UpdateAvatar(ctx context.Context, req *user.UpdateAvatarReq, callOptions ...callopt.Option) (r *common.BaseResp, err error)
 	CheckUsername(ctx context.Context, req *user.CheckUsernameReq, callOptions ...callopt.Option) (r *user.CheckUsernameResp, err error)
+	BatchCheckUsernames(ctx context.Context, req *user.BatchCheckUsernamesReq, callOptions ...callopt.Option) (r *user.BatchCheckUsernamesResp, err error)
 	GetUserStats(ctx context.Context, req *user.UserStatsReq, callOptions ...callopt.Option) (r *user.UserStatsResp, err error)
+	SearchUsers(ctx context.Context, req *user.SearchUsersReq, callOptions ...callopt.Option) (r *user.SearchUsersResp, err error)
+	UpdateFollowCount(ctx context.Context, req *user.UpdateFollowCountReq, callOptions ...callopt.Option) (r *common.BaseResp, err error)
+	UpdateFollowerCount(ctx context.Context, req *user.UpdateFollowerCountReq, callOptions ...callopt.Option) (r *common.BaseResp, err error)
 	VerifyToken(ctx context.Context, token string, callOptions ...callopt.Option) (r bool, err error)
 }
 
@@ -66,6 +72,11 @@ func (p *kUserServiceClient) GetUserInfo(ctx context.Context, req *user.UserInfo
 	return p.kClient.GetUserInfo(ctx, req)
 }
 
+func (p *kUserServiceClient) GetUserInfoByUsername(ctx context.Context, req *user.UserInfoByUsernameReq, callOptions ...callopt.Option) (r *user.UserInfoResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetUserInfoByUsername(ctx, req)
+}
+
 func (p *kUserServiceClient) BatchGetUserInfo(ctx context.Context, req *user.BatchUserInfoReq, callOptions ...callopt.Option) (r *user.BatchUserInfoResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.BatchGetUserInfo(ctx, req)
@@ -76,14 +87,39 @@ func (p *kUserServiceClient) UpdateUser(ctx context.Context, req *user.UpdateUse
 	return p.kClient.UpdateUser(ctx, req)
 }
 
+func (p *kUserServiceClient) UpdateAvatar(ctx context.Context, req *user.UpdateAvatarReq, callOptions ...callopt.Option) (r *common.BaseResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.UpdateAvatar(ctx, req)
+}
+
 func (p *kUserServiceClient) CheckUsername(ctx context.Context, req *user.CheckUsernameReq, callOptions ...callopt.Option) (r *user.CheckUsernameResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.CheckUsername(ctx, req)
 }
 
+func (p *kUserServiceClient) BatchCheckUsernames(ctx context.Context, req *user.BatchCheckUsernamesReq, callOptions ...callopt.Option) (r *user.BatchCheckUsernamesResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.BatchCheckUsernames(ctx, req)
+}
+
 func (p *kUserServiceClient) GetUserStats(ctx context.Context, req *user.UserStatsReq, callOptions ...callopt.Option) (r *user.UserStatsResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetUserStats(ctx, req)
+}
+
+func (p *kUserServiceClient) SearchUsers(ctx context.Context, req *user.SearchUsersReq, callOptions ...callopt.Option) (r *user.SearchUsersResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.SearchUsers(ctx, req)
+}
+
+func (p *kUserServiceClient) UpdateFollowCount(ctx context.Context, req *user.UpdateFollowCountReq, callOptions ...callopt.Option) (r *common.BaseResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.UpdateFollowCount(ctx, req)
+}
+
+func (p *kUserServiceClient) UpdateFollowerCount(ctx context.Context, req *user.UpdateFollowerCountReq, callOptions ...callopt.Option) (r *common.BaseResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.UpdateFollowerCount(ctx, req)
 }
 
 func (p *kUserServiceClient) VerifyToken(ctx context.Context, token string, callOptions ...callopt.Option) (r bool, err error) {

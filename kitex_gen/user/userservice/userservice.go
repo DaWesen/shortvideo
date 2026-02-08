@@ -35,6 +35,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
+	"GetUserInfoByUsername": kitex.NewMethodInfo(
+		getUserInfoByUsernameHandler,
+		newUserServiceGetUserInfoByUsernameArgs,
+		newUserServiceGetUserInfoByUsernameResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
 	"BatchGetUserInfo": kitex.NewMethodInfo(
 		batchGetUserInfoHandler,
 		newUserServiceBatchGetUserInfoArgs,
@@ -49,6 +56,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
+	"UpdateAvatar": kitex.NewMethodInfo(
+		updateAvatarHandler,
+		newUserServiceUpdateAvatarArgs,
+		newUserServiceUpdateAvatarResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
 	"CheckUsername": kitex.NewMethodInfo(
 		checkUsernameHandler,
 		newUserServiceCheckUsernameArgs,
@@ -56,10 +70,38 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
+	"BatchCheckUsernames": kitex.NewMethodInfo(
+		batchCheckUsernamesHandler,
+		newUserServiceBatchCheckUsernamesArgs,
+		newUserServiceBatchCheckUsernamesResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
 	"GetUserStats": kitex.NewMethodInfo(
 		getUserStatsHandler,
 		newUserServiceGetUserStatsArgs,
 		newUserServiceGetUserStatsResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
+	"SearchUsers": kitex.NewMethodInfo(
+		searchUsersHandler,
+		newUserServiceSearchUsersArgs,
+		newUserServiceSearchUsersResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
+	"UpdateFollowCount": kitex.NewMethodInfo(
+		updateFollowCountHandler,
+		newUserServiceUpdateFollowCountArgs,
+		newUserServiceUpdateFollowCountResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
+	"UpdateFollowerCount": kitex.NewMethodInfo(
+		updateFollowerCountHandler,
+		newUserServiceUpdateFollowerCountArgs,
+		newUserServiceUpdateFollowerCountResult,
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
@@ -190,6 +232,24 @@ func newUserServiceGetUserInfoResult() interface{} {
 	return user.NewUserServiceGetUserInfoResult()
 }
 
+func getUserInfoByUsernameHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*user.UserServiceGetUserInfoByUsernameArgs)
+	realResult := result.(*user.UserServiceGetUserInfoByUsernameResult)
+	success, err := handler.(user.UserService).GetUserInfoByUsername(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newUserServiceGetUserInfoByUsernameArgs() interface{} {
+	return user.NewUserServiceGetUserInfoByUsernameArgs()
+}
+
+func newUserServiceGetUserInfoByUsernameResult() interface{} {
+	return user.NewUserServiceGetUserInfoByUsernameResult()
+}
+
 func batchGetUserInfoHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	realArg := arg.(*user.UserServiceBatchGetUserInfoArgs)
 	realResult := result.(*user.UserServiceBatchGetUserInfoResult)
@@ -226,6 +286,24 @@ func newUserServiceUpdateUserResult() interface{} {
 	return user.NewUserServiceUpdateUserResult()
 }
 
+func updateAvatarHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*user.UserServiceUpdateAvatarArgs)
+	realResult := result.(*user.UserServiceUpdateAvatarResult)
+	success, err := handler.(user.UserService).UpdateAvatar(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newUserServiceUpdateAvatarArgs() interface{} {
+	return user.NewUserServiceUpdateAvatarArgs()
+}
+
+func newUserServiceUpdateAvatarResult() interface{} {
+	return user.NewUserServiceUpdateAvatarResult()
+}
+
 func checkUsernameHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	realArg := arg.(*user.UserServiceCheckUsernameArgs)
 	realResult := result.(*user.UserServiceCheckUsernameResult)
@@ -244,6 +322,24 @@ func newUserServiceCheckUsernameResult() interface{} {
 	return user.NewUserServiceCheckUsernameResult()
 }
 
+func batchCheckUsernamesHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*user.UserServiceBatchCheckUsernamesArgs)
+	realResult := result.(*user.UserServiceBatchCheckUsernamesResult)
+	success, err := handler.(user.UserService).BatchCheckUsernames(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newUserServiceBatchCheckUsernamesArgs() interface{} {
+	return user.NewUserServiceBatchCheckUsernamesArgs()
+}
+
+func newUserServiceBatchCheckUsernamesResult() interface{} {
+	return user.NewUserServiceBatchCheckUsernamesResult()
+}
+
 func getUserStatsHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	realArg := arg.(*user.UserServiceGetUserStatsArgs)
 	realResult := result.(*user.UserServiceGetUserStatsResult)
@@ -260,6 +356,60 @@ func newUserServiceGetUserStatsArgs() interface{} {
 
 func newUserServiceGetUserStatsResult() interface{} {
 	return user.NewUserServiceGetUserStatsResult()
+}
+
+func searchUsersHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*user.UserServiceSearchUsersArgs)
+	realResult := result.(*user.UserServiceSearchUsersResult)
+	success, err := handler.(user.UserService).SearchUsers(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newUserServiceSearchUsersArgs() interface{} {
+	return user.NewUserServiceSearchUsersArgs()
+}
+
+func newUserServiceSearchUsersResult() interface{} {
+	return user.NewUserServiceSearchUsersResult()
+}
+
+func updateFollowCountHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*user.UserServiceUpdateFollowCountArgs)
+	realResult := result.(*user.UserServiceUpdateFollowCountResult)
+	success, err := handler.(user.UserService).UpdateFollowCount(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newUserServiceUpdateFollowCountArgs() interface{} {
+	return user.NewUserServiceUpdateFollowCountArgs()
+}
+
+func newUserServiceUpdateFollowCountResult() interface{} {
+	return user.NewUserServiceUpdateFollowCountResult()
+}
+
+func updateFollowerCountHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*user.UserServiceUpdateFollowerCountArgs)
+	realResult := result.(*user.UserServiceUpdateFollowerCountResult)
+	success, err := handler.(user.UserService).UpdateFollowerCount(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newUserServiceUpdateFollowerCountArgs() interface{} {
+	return user.NewUserServiceUpdateFollowerCountArgs()
+}
+
+func newUserServiceUpdateFollowerCountResult() interface{} {
+	return user.NewUserServiceUpdateFollowerCountResult()
 }
 
 func verifyTokenHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
@@ -320,6 +470,16 @@ func (p *kClient) GetUserInfo(ctx context.Context, req *user.UserInfoReq) (r *us
 	return _result.GetSuccess(), nil
 }
 
+func (p *kClient) GetUserInfoByUsername(ctx context.Context, req *user.UserInfoByUsernameReq) (r *user.UserInfoResp, err error) {
+	var _args user.UserServiceGetUserInfoByUsernameArgs
+	_args.Req = req
+	var _result user.UserServiceGetUserInfoByUsernameResult
+	if err = p.c.Call(ctx, "GetUserInfoByUsername", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
 func (p *kClient) BatchGetUserInfo(ctx context.Context, req *user.BatchUserInfoReq) (r *user.BatchUserInfoResp, err error) {
 	var _args user.UserServiceBatchGetUserInfoArgs
 	_args.Req = req
@@ -340,6 +500,16 @@ func (p *kClient) UpdateUser(ctx context.Context, req *user.UpdateUserReq) (r *c
 	return _result.GetSuccess(), nil
 }
 
+func (p *kClient) UpdateAvatar(ctx context.Context, req *user.UpdateAvatarReq) (r *common.BaseResp, err error) {
+	var _args user.UserServiceUpdateAvatarArgs
+	_args.Req = req
+	var _result user.UserServiceUpdateAvatarResult
+	if err = p.c.Call(ctx, "UpdateAvatar", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
 func (p *kClient) CheckUsername(ctx context.Context, req *user.CheckUsernameReq) (r *user.CheckUsernameResp, err error) {
 	var _args user.UserServiceCheckUsernameArgs
 	_args.Req = req
@@ -350,11 +520,51 @@ func (p *kClient) CheckUsername(ctx context.Context, req *user.CheckUsernameReq)
 	return _result.GetSuccess(), nil
 }
 
+func (p *kClient) BatchCheckUsernames(ctx context.Context, req *user.BatchCheckUsernamesReq) (r *user.BatchCheckUsernamesResp, err error) {
+	var _args user.UserServiceBatchCheckUsernamesArgs
+	_args.Req = req
+	var _result user.UserServiceBatchCheckUsernamesResult
+	if err = p.c.Call(ctx, "BatchCheckUsernames", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
 func (p *kClient) GetUserStats(ctx context.Context, req *user.UserStatsReq) (r *user.UserStatsResp, err error) {
 	var _args user.UserServiceGetUserStatsArgs
 	_args.Req = req
 	var _result user.UserServiceGetUserStatsResult
 	if err = p.c.Call(ctx, "GetUserStats", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) SearchUsers(ctx context.Context, req *user.SearchUsersReq) (r *user.SearchUsersResp, err error) {
+	var _args user.UserServiceSearchUsersArgs
+	_args.Req = req
+	var _result user.UserServiceSearchUsersResult
+	if err = p.c.Call(ctx, "SearchUsers", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) UpdateFollowCount(ctx context.Context, req *user.UpdateFollowCountReq) (r *common.BaseResp, err error) {
+	var _args user.UserServiceUpdateFollowCountArgs
+	_args.Req = req
+	var _result user.UserServiceUpdateFollowCountResult
+	if err = p.c.Call(ctx, "UpdateFollowCount", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) UpdateFollowerCount(ctx context.Context, req *user.UpdateFollowerCountReq) (r *common.BaseResp, err error) {
+	var _args user.UserServiceUpdateFollowerCountArgs
+	_args.Req = req
+	var _result user.UserServiceUpdateFollowerCountResult
+	if err = p.c.Call(ctx, "UpdateFollowerCount", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

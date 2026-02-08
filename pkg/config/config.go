@@ -28,6 +28,7 @@ type Config struct {
 	JWT           JWTConfig           `mapstructure:"jwt"`
 	Prometheus    PrometheusConfig    `mapstructure:"prometheus"`
 	Tracing       TracingConfig       `mapstructure:"tracing"`
+	WebSocket     WebSocketConfig     `mapstructure:"websocket"`
 }
 
 // 应用配置
@@ -48,22 +49,41 @@ type PortsConfig struct {
 	Live        int `mapstructure:"live"`
 	Danmu       int `mapstructure:"danmu"`
 	Recommend   int `mapstructure:"recommend"`
+	WebSocket   int `mapstructure:"websocket"`
 }
 
 // 服务配置
 type ServicesConfig struct {
-	User        ServiceConfig `mapstructure:"user"`
-	Video       ServiceConfig `mapstructure:"video"`
-	Social      ServiceConfig `mapstructure:"social"`
-	Interaction ServiceConfig `mapstructure:"interaction"`
-	Message     ServiceConfig `mapstructure:"message"`
-	Live        ServiceConfig `mapstructure:"live"`
-	Danmu       ServiceConfig `mapstructure:"danmu"`
-	Recommend   ServiceConfig `mapstructure:"recommend"`
+	User        ServiceConfig          `mapstructure:"user"`
+	Video       ServiceConfig          `mapstructure:"video"`
+	Social      ServiceConfig          `mapstructure:"social"`
+	Interaction ServiceConfig          `mapstructure:"interaction"`
+	Message     ServiceConfig          `mapstructure:"message"`
+	Live        ServiceConfig          `mapstructure:"live"`
+	Danmu       ServiceConfig          `mapstructure:"danmu"`
+	Recommend   ServiceConfig          `mapstructure:"recommend"`
+	WebSocket   WebSocketServiceConfig `mapstructure:"websocket"`
 }
 
 type ServiceConfig struct {
 	Timeout string `mapstructure:"timeout"`
+}
+
+// WebSocket服务配置
+type WebSocketServiceConfig struct {
+	Timeout        string `mapstructure:"timeout"`
+	MaxConnections int    `mapstructure:"max_connections"`
+	PingInterval   string `mapstructure:"ping_interval"`
+	WriteWait      string `mapstructure:"write_wait"`
+	PongWait       string `mapstructure:"pong_wait"`
+}
+
+// WebSocket配置
+type WebSocketConfig struct {
+	Enable       bool     `mapstructure:"enable"`
+	Path         string   `mapstructure:"path"`
+	AllowOrigins []string `mapstructure:"allow_origins"`
+	BufferSize   int      `mapstructure:"buffer_size"`
 }
 
 // 数据库配置
@@ -209,6 +229,7 @@ func setDefaults() {
 	viper.SetDefault("ports.live", 8886)
 	viper.SetDefault("ports.danmu", 8887)
 	viper.SetDefault("ports.recommend", 8888)
+	viper.SetDefault("ports.websocket", 8889)
 
 	viper.SetDefault("services.user.timeout", "5s")
 	viper.SetDefault("services.video.timeout", "5s")
@@ -218,6 +239,11 @@ func setDefaults() {
 	viper.SetDefault("services.live.timeout", "5s")
 	viper.SetDefault("services.danmu.timeout", "5s")
 	viper.SetDefault("services.recommend.timeout", "5s")
+	viper.SetDefault("services.websocket.timeout", "30s")
+	viper.SetDefault("services.websocket.max_connections", 10000)
+	viper.SetDefault("services.websocket.ping_interval", "30s")
+	viper.SetDefault("services.websocket.write_wait", "10s")
+	viper.SetDefault("services.websocket.pong_wait", "60s")
 
 	viper.SetDefault("database.postgres.host", "localhost")
 	viper.SetDefault("database.postgres.port", 5432)
@@ -271,6 +297,11 @@ func setDefaults() {
 	viper.SetDefault("tracing.enable", false)
 	viper.SetDefault("tracing.jaeger_endpoint", "http://localhost:14268/api/traces")
 	viper.SetDefault("tracing.sample_rate", 0.1)
+
+	viper.SetDefault("websocket.enable", true)
+	viper.SetDefault("websocket.path", "/ws")
+	viper.SetDefault("websocket.allow_origins", []string{"*"})
+	viper.SetDefault("websocket.buffer_size", 4096)
 }
 
 // 获取PostgreSQL连接字符串
