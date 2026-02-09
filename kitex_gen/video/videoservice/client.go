@@ -21,6 +21,9 @@ type Client interface {
 	UpdateVideoInfo(ctx context.Context, req *video.UpdateVideoInfoReq, callOptions ...callopt.Option) (r *video.UpdateVideoInfoResp, err error)
 	GetVideoStats(ctx context.Context, req *video.VideoStatsReq, callOptions ...callopt.Option) (r *video.VideoStatsResp, err error)
 	GetHotVideos(ctx context.Context, req *video.HotVideoReq, callOptions ...callopt.Option) (r *video.HotVideoResp, err error)
+	UploadVideo(ctx context.Context, req *video.UploadVideoReq, callOptions ...callopt.Option) (r *video.UploadVideoResp, err error)
+	GetUserVideoCount(ctx context.Context, req *video.GetUserVideoCountReq, callOptions ...callopt.Option) (r *video.GetUserVideoCountResp, err error)
+	GetTotalVideoCount(ctx context.Context, req *video.GetTotalVideoCountReq, callOptions ...callopt.Option) (r *video.GetTotalVideoCountResp, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -100,4 +103,19 @@ func (p *kVideoServiceClient) GetVideoStats(ctx context.Context, req *video.Vide
 func (p *kVideoServiceClient) GetHotVideos(ctx context.Context, req *video.HotVideoReq, callOptions ...callopt.Option) (r *video.HotVideoResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetHotVideos(ctx, req)
+}
+
+func (p *kVideoServiceClient) UploadVideo(ctx context.Context, req *video.UploadVideoReq, callOptions ...callopt.Option) (r *video.UploadVideoResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.UploadVideo(ctx, req)
+}
+
+func (p *kVideoServiceClient) GetUserVideoCount(ctx context.Context, req *video.GetUserVideoCountReq, callOptions ...callopt.Option) (r *video.GetUserVideoCountResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetUserVideoCount(ctx, req)
+}
+
+func (p *kVideoServiceClient) GetTotalVideoCount(ctx context.Context, req *video.GetTotalVideoCountReq, callOptions ...callopt.Option) (r *video.GetTotalVideoCountResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetTotalVideoCount(ctx, req)
 }

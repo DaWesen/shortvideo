@@ -1049,6 +1049,269 @@ var fieldIDToName_HotVideoResp = map[int16]string{
 	2: "videos",
 }
 
+type UploadVideoReq struct {
+	UserId      int64  `thrift:"userId,1" frugal:"1,default,i64" json:"userId"`
+	VideoData   []byte `thrift:"videoData,2" frugal:"2,default,binary" json:"videoData"`
+	CoverData   []byte `thrift:"coverData,3" frugal:"3,default,binary" json:"coverData"`
+	Title       string `thrift:"title,4" frugal:"4,default,string" json:"title"`
+	Description string `thrift:"description,5" frugal:"5,default,string" json:"description"`
+}
+
+func NewUploadVideoReq() *UploadVideoReq {
+	return &UploadVideoReq{}
+}
+
+func (p *UploadVideoReq) InitDefault() {
+}
+
+func (p *UploadVideoReq) GetUserId() (v int64) {
+	return p.UserId
+}
+
+func (p *UploadVideoReq) GetVideoData() (v []byte) {
+	return p.VideoData
+}
+
+func (p *UploadVideoReq) GetCoverData() (v []byte) {
+	return p.CoverData
+}
+
+func (p *UploadVideoReq) GetTitle() (v string) {
+	return p.Title
+}
+
+func (p *UploadVideoReq) GetDescription() (v string) {
+	return p.Description
+}
+func (p *UploadVideoReq) SetUserId(val int64) {
+	p.UserId = val
+}
+func (p *UploadVideoReq) SetVideoData(val []byte) {
+	p.VideoData = val
+}
+func (p *UploadVideoReq) SetCoverData(val []byte) {
+	p.CoverData = val
+}
+func (p *UploadVideoReq) SetTitle(val string) {
+	p.Title = val
+}
+func (p *UploadVideoReq) SetDescription(val string) {
+	p.Description = val
+}
+
+func (p *UploadVideoReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UploadVideoReq(%+v)", *p)
+}
+
+var fieldIDToName_UploadVideoReq = map[int16]string{
+	1: "userId",
+	2: "videoData",
+	3: "coverData",
+	4: "title",
+	5: "description",
+}
+
+type UploadVideoResp struct {
+	BaseResp *common.BaseResp `thrift:"BaseResp,1" frugal:"1,default,common.BaseResp" json:"BaseResp"`
+	VideoUrl string           `thrift:"videoUrl,2" frugal:"2,default,string" json:"videoUrl"`
+	CoverUrl string           `thrift:"coverUrl,3" frugal:"3,default,string" json:"coverUrl"`
+}
+
+func NewUploadVideoResp() *UploadVideoResp {
+	return &UploadVideoResp{}
+}
+
+func (p *UploadVideoResp) InitDefault() {
+}
+
+var UploadVideoResp_BaseResp_DEFAULT *common.BaseResp
+
+func (p *UploadVideoResp) GetBaseResp() (v *common.BaseResp) {
+	if !p.IsSetBaseResp() {
+		return UploadVideoResp_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
+func (p *UploadVideoResp) GetVideoUrl() (v string) {
+	return p.VideoUrl
+}
+
+func (p *UploadVideoResp) GetCoverUrl() (v string) {
+	return p.CoverUrl
+}
+func (p *UploadVideoResp) SetBaseResp(val *common.BaseResp) {
+	p.BaseResp = val
+}
+func (p *UploadVideoResp) SetVideoUrl(val string) {
+	p.VideoUrl = val
+}
+func (p *UploadVideoResp) SetCoverUrl(val string) {
+	p.CoverUrl = val
+}
+
+func (p *UploadVideoResp) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *UploadVideoResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("UploadVideoResp(%+v)", *p)
+}
+
+var fieldIDToName_UploadVideoResp = map[int16]string{
+	1: "BaseResp",
+	2: "videoUrl",
+	3: "coverUrl",
+}
+
+type GetUserVideoCountReq struct {
+	UserId int64 `thrift:"userId,1" frugal:"1,default,i64" json:"userId"`
+}
+
+func NewGetUserVideoCountReq() *GetUserVideoCountReq {
+	return &GetUserVideoCountReq{}
+}
+
+func (p *GetUserVideoCountReq) InitDefault() {
+}
+
+func (p *GetUserVideoCountReq) GetUserId() (v int64) {
+	return p.UserId
+}
+func (p *GetUserVideoCountReq) SetUserId(val int64) {
+	p.UserId = val
+}
+
+func (p *GetUserVideoCountReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetUserVideoCountReq(%+v)", *p)
+}
+
+var fieldIDToName_GetUserVideoCountReq = map[int16]string{
+	1: "userId",
+}
+
+type GetUserVideoCountResp struct {
+	BaseResp *common.BaseResp `thrift:"BaseResp,1" frugal:"1,default,common.BaseResp" json:"BaseResp"`
+	Count    int64            `thrift:"count,2" frugal:"2,default,i64" json:"count"`
+}
+
+func NewGetUserVideoCountResp() *GetUserVideoCountResp {
+	return &GetUserVideoCountResp{}
+}
+
+func (p *GetUserVideoCountResp) InitDefault() {
+}
+
+var GetUserVideoCountResp_BaseResp_DEFAULT *common.BaseResp
+
+func (p *GetUserVideoCountResp) GetBaseResp() (v *common.BaseResp) {
+	if !p.IsSetBaseResp() {
+		return GetUserVideoCountResp_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
+func (p *GetUserVideoCountResp) GetCount() (v int64) {
+	return p.Count
+}
+func (p *GetUserVideoCountResp) SetBaseResp(val *common.BaseResp) {
+	p.BaseResp = val
+}
+func (p *GetUserVideoCountResp) SetCount(val int64) {
+	p.Count = val
+}
+
+func (p *GetUserVideoCountResp) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *GetUserVideoCountResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetUserVideoCountResp(%+v)", *p)
+}
+
+var fieldIDToName_GetUserVideoCountResp = map[int16]string{
+	1: "BaseResp",
+	2: "count",
+}
+
+type GetTotalVideoCountReq struct {
+}
+
+func NewGetTotalVideoCountReq() *GetTotalVideoCountReq {
+	return &GetTotalVideoCountReq{}
+}
+
+func (p *GetTotalVideoCountReq) InitDefault() {
+}
+
+func (p *GetTotalVideoCountReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetTotalVideoCountReq(%+v)", *p)
+}
+
+var fieldIDToName_GetTotalVideoCountReq = map[int16]string{}
+
+type GetTotalVideoCountResp struct {
+	BaseResp *common.BaseResp `thrift:"BaseResp,1" frugal:"1,default,common.BaseResp" json:"BaseResp"`
+	Count    int64            `thrift:"count,2" frugal:"2,default,i64" json:"count"`
+}
+
+func NewGetTotalVideoCountResp() *GetTotalVideoCountResp {
+	return &GetTotalVideoCountResp{}
+}
+
+func (p *GetTotalVideoCountResp) InitDefault() {
+}
+
+var GetTotalVideoCountResp_BaseResp_DEFAULT *common.BaseResp
+
+func (p *GetTotalVideoCountResp) GetBaseResp() (v *common.BaseResp) {
+	if !p.IsSetBaseResp() {
+		return GetTotalVideoCountResp_BaseResp_DEFAULT
+	}
+	return p.BaseResp
+}
+
+func (p *GetTotalVideoCountResp) GetCount() (v int64) {
+	return p.Count
+}
+func (p *GetTotalVideoCountResp) SetBaseResp(val *common.BaseResp) {
+	p.BaseResp = val
+}
+func (p *GetTotalVideoCountResp) SetCount(val int64) {
+	p.Count = val
+}
+
+func (p *GetTotalVideoCountResp) IsSetBaseResp() bool {
+	return p.BaseResp != nil
+}
+
+func (p *GetTotalVideoCountResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetTotalVideoCountResp(%+v)", *p)
+}
+
+var fieldIDToName_GetTotalVideoCountResp = map[int16]string{
+	1: "BaseResp",
+	2: "count",
+}
+
 type VideoService interface {
 	PublishVideo(ctx context.Context, req *PublishVideoReq) (r *PublishVideoResp, err error)
 
@@ -1069,6 +1332,12 @@ type VideoService interface {
 	GetVideoStats(ctx context.Context, req *VideoStatsReq) (r *VideoStatsResp, err error)
 
 	GetHotVideos(ctx context.Context, req *HotVideoReq) (r *HotVideoResp, err error)
+
+	UploadVideo(ctx context.Context, req *UploadVideoReq) (r *UploadVideoResp, err error)
+
+	GetUserVideoCount(ctx context.Context, req *GetUserVideoCountReq) (r *GetUserVideoCountResp, err error)
+
+	GetTotalVideoCount(ctx context.Context, req *GetTotalVideoCountReq) (r *GetTotalVideoCountResp, err error)
 }
 
 type VideoServicePublishVideoArgs struct {
@@ -1828,5 +2097,233 @@ func (p *VideoServiceGetHotVideosResult) String() string {
 }
 
 var fieldIDToName_VideoServiceGetHotVideosResult = map[int16]string{
+	0: "success",
+}
+
+type VideoServiceUploadVideoArgs struct {
+	Req *UploadVideoReq `thrift:"req,1" frugal:"1,default,UploadVideoReq" json:"req"`
+}
+
+func NewVideoServiceUploadVideoArgs() *VideoServiceUploadVideoArgs {
+	return &VideoServiceUploadVideoArgs{}
+}
+
+func (p *VideoServiceUploadVideoArgs) InitDefault() {
+}
+
+var VideoServiceUploadVideoArgs_Req_DEFAULT *UploadVideoReq
+
+func (p *VideoServiceUploadVideoArgs) GetReq() (v *UploadVideoReq) {
+	if !p.IsSetReq() {
+		return VideoServiceUploadVideoArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *VideoServiceUploadVideoArgs) SetReq(val *UploadVideoReq) {
+	p.Req = val
+}
+
+func (p *VideoServiceUploadVideoArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *VideoServiceUploadVideoArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoServiceUploadVideoArgs(%+v)", *p)
+}
+
+var fieldIDToName_VideoServiceUploadVideoArgs = map[int16]string{
+	1: "req",
+}
+
+type VideoServiceUploadVideoResult struct {
+	Success *UploadVideoResp `thrift:"success,0,optional" frugal:"0,optional,UploadVideoResp" json:"success,omitempty"`
+}
+
+func NewVideoServiceUploadVideoResult() *VideoServiceUploadVideoResult {
+	return &VideoServiceUploadVideoResult{}
+}
+
+func (p *VideoServiceUploadVideoResult) InitDefault() {
+}
+
+var VideoServiceUploadVideoResult_Success_DEFAULT *UploadVideoResp
+
+func (p *VideoServiceUploadVideoResult) GetSuccess() (v *UploadVideoResp) {
+	if !p.IsSetSuccess() {
+		return VideoServiceUploadVideoResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *VideoServiceUploadVideoResult) SetSuccess(x interface{}) {
+	p.Success = x.(*UploadVideoResp)
+}
+
+func (p *VideoServiceUploadVideoResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VideoServiceUploadVideoResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoServiceUploadVideoResult(%+v)", *p)
+}
+
+var fieldIDToName_VideoServiceUploadVideoResult = map[int16]string{
+	0: "success",
+}
+
+type VideoServiceGetUserVideoCountArgs struct {
+	Req *GetUserVideoCountReq `thrift:"req,1" frugal:"1,default,GetUserVideoCountReq" json:"req"`
+}
+
+func NewVideoServiceGetUserVideoCountArgs() *VideoServiceGetUserVideoCountArgs {
+	return &VideoServiceGetUserVideoCountArgs{}
+}
+
+func (p *VideoServiceGetUserVideoCountArgs) InitDefault() {
+}
+
+var VideoServiceGetUserVideoCountArgs_Req_DEFAULT *GetUserVideoCountReq
+
+func (p *VideoServiceGetUserVideoCountArgs) GetReq() (v *GetUserVideoCountReq) {
+	if !p.IsSetReq() {
+		return VideoServiceGetUserVideoCountArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *VideoServiceGetUserVideoCountArgs) SetReq(val *GetUserVideoCountReq) {
+	p.Req = val
+}
+
+func (p *VideoServiceGetUserVideoCountArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *VideoServiceGetUserVideoCountArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoServiceGetUserVideoCountArgs(%+v)", *p)
+}
+
+var fieldIDToName_VideoServiceGetUserVideoCountArgs = map[int16]string{
+	1: "req",
+}
+
+type VideoServiceGetUserVideoCountResult struct {
+	Success *GetUserVideoCountResp `thrift:"success,0,optional" frugal:"0,optional,GetUserVideoCountResp" json:"success,omitempty"`
+}
+
+func NewVideoServiceGetUserVideoCountResult() *VideoServiceGetUserVideoCountResult {
+	return &VideoServiceGetUserVideoCountResult{}
+}
+
+func (p *VideoServiceGetUserVideoCountResult) InitDefault() {
+}
+
+var VideoServiceGetUserVideoCountResult_Success_DEFAULT *GetUserVideoCountResp
+
+func (p *VideoServiceGetUserVideoCountResult) GetSuccess() (v *GetUserVideoCountResp) {
+	if !p.IsSetSuccess() {
+		return VideoServiceGetUserVideoCountResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *VideoServiceGetUserVideoCountResult) SetSuccess(x interface{}) {
+	p.Success = x.(*GetUserVideoCountResp)
+}
+
+func (p *VideoServiceGetUserVideoCountResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VideoServiceGetUserVideoCountResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoServiceGetUserVideoCountResult(%+v)", *p)
+}
+
+var fieldIDToName_VideoServiceGetUserVideoCountResult = map[int16]string{
+	0: "success",
+}
+
+type VideoServiceGetTotalVideoCountArgs struct {
+	Req *GetTotalVideoCountReq `thrift:"req,1" frugal:"1,default,GetTotalVideoCountReq" json:"req"`
+}
+
+func NewVideoServiceGetTotalVideoCountArgs() *VideoServiceGetTotalVideoCountArgs {
+	return &VideoServiceGetTotalVideoCountArgs{}
+}
+
+func (p *VideoServiceGetTotalVideoCountArgs) InitDefault() {
+}
+
+var VideoServiceGetTotalVideoCountArgs_Req_DEFAULT *GetTotalVideoCountReq
+
+func (p *VideoServiceGetTotalVideoCountArgs) GetReq() (v *GetTotalVideoCountReq) {
+	if !p.IsSetReq() {
+		return VideoServiceGetTotalVideoCountArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+func (p *VideoServiceGetTotalVideoCountArgs) SetReq(val *GetTotalVideoCountReq) {
+	p.Req = val
+}
+
+func (p *VideoServiceGetTotalVideoCountArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *VideoServiceGetTotalVideoCountArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoServiceGetTotalVideoCountArgs(%+v)", *p)
+}
+
+var fieldIDToName_VideoServiceGetTotalVideoCountArgs = map[int16]string{
+	1: "req",
+}
+
+type VideoServiceGetTotalVideoCountResult struct {
+	Success *GetTotalVideoCountResp `thrift:"success,0,optional" frugal:"0,optional,GetTotalVideoCountResp" json:"success,omitempty"`
+}
+
+func NewVideoServiceGetTotalVideoCountResult() *VideoServiceGetTotalVideoCountResult {
+	return &VideoServiceGetTotalVideoCountResult{}
+}
+
+func (p *VideoServiceGetTotalVideoCountResult) InitDefault() {
+}
+
+var VideoServiceGetTotalVideoCountResult_Success_DEFAULT *GetTotalVideoCountResp
+
+func (p *VideoServiceGetTotalVideoCountResult) GetSuccess() (v *GetTotalVideoCountResp) {
+	if !p.IsSetSuccess() {
+		return VideoServiceGetTotalVideoCountResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *VideoServiceGetTotalVideoCountResult) SetSuccess(x interface{}) {
+	p.Success = x.(*GetTotalVideoCountResp)
+}
+
+func (p *VideoServiceGetTotalVideoCountResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VideoServiceGetTotalVideoCountResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VideoServiceGetTotalVideoCountResult(%+v)", *p)
+}
+
+var fieldIDToName_VideoServiceGetTotalVideoCountResult = map[int16]string{
 	0: "success",
 }

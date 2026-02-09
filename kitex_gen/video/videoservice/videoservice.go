@@ -83,6 +83,27 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingNone),
 	),
+	"UploadVideo": kitex.NewMethodInfo(
+		uploadVideoHandler,
+		newVideoServiceUploadVideoArgs,
+		newVideoServiceUploadVideoResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
+	"GetUserVideoCount": kitex.NewMethodInfo(
+		getUserVideoCountHandler,
+		newVideoServiceGetUserVideoCountArgs,
+		newVideoServiceGetUserVideoCountResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
+	"GetTotalVideoCount": kitex.NewMethodInfo(
+		getTotalVideoCountHandler,
+		newVideoServiceGetTotalVideoCountArgs,
+		newVideoServiceGetTotalVideoCountResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingNone),
+	),
 }
 
 var (
@@ -329,6 +350,60 @@ func newVideoServiceGetHotVideosResult() interface{} {
 	return video.NewVideoServiceGetHotVideosResult()
 }
 
+func uploadVideoHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*video.VideoServiceUploadVideoArgs)
+	realResult := result.(*video.VideoServiceUploadVideoResult)
+	success, err := handler.(video.VideoService).UploadVideo(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newVideoServiceUploadVideoArgs() interface{} {
+	return video.NewVideoServiceUploadVideoArgs()
+}
+
+func newVideoServiceUploadVideoResult() interface{} {
+	return video.NewVideoServiceUploadVideoResult()
+}
+
+func getUserVideoCountHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*video.VideoServiceGetUserVideoCountArgs)
+	realResult := result.(*video.VideoServiceGetUserVideoCountResult)
+	success, err := handler.(video.VideoService).GetUserVideoCount(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newVideoServiceGetUserVideoCountArgs() interface{} {
+	return video.NewVideoServiceGetUserVideoCountArgs()
+}
+
+func newVideoServiceGetUserVideoCountResult() interface{} {
+	return video.NewVideoServiceGetUserVideoCountResult()
+}
+
+func getTotalVideoCountHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*video.VideoServiceGetTotalVideoCountArgs)
+	realResult := result.(*video.VideoServiceGetTotalVideoCountResult)
+	success, err := handler.(video.VideoService).GetTotalVideoCount(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newVideoServiceGetTotalVideoCountArgs() interface{} {
+	return video.NewVideoServiceGetTotalVideoCountArgs()
+}
+
+func newVideoServiceGetTotalVideoCountResult() interface{} {
+	return video.NewVideoServiceGetTotalVideoCountResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -434,6 +509,36 @@ func (p *kClient) GetHotVideos(ctx context.Context, req *video.HotVideoReq) (r *
 	_args.Req = req
 	var _result video.VideoServiceGetHotVideosResult
 	if err = p.c.Call(ctx, "GetHotVideos", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) UploadVideo(ctx context.Context, req *video.UploadVideoReq) (r *video.UploadVideoResp, err error) {
+	var _args video.VideoServiceUploadVideoArgs
+	_args.Req = req
+	var _result video.VideoServiceUploadVideoResult
+	if err = p.c.Call(ctx, "UploadVideo", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetUserVideoCount(ctx context.Context, req *video.GetUserVideoCountReq) (r *video.GetUserVideoCountResp, err error) {
+	var _args video.VideoServiceGetUserVideoCountArgs
+	_args.Req = req
+	var _result video.VideoServiceGetUserVideoCountResult
+	if err = p.c.Call(ctx, "GetUserVideoCount", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetTotalVideoCount(ctx context.Context, req *video.GetTotalVideoCountReq) (r *video.GetTotalVideoCountResp, err error) {
+	var _args video.VideoServiceGetTotalVideoCountArgs
+	_args.Req = req
+	var _result video.VideoServiceGetTotalVideoCountResult
+	if err = p.c.Call(ctx, "GetTotalVideoCount", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

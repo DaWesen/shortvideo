@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"mime"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -183,7 +184,7 @@ func (s *MinioStorage) Exists(ctx context.Context, bucket, object string) (bool,
 
 	_, err := s.client.StatObject(ctx, bucket, object, minio.StatObjectOptions{})
 	if err != nil {
-		if strings.Contains(err.Error(), "object does not exist") {
+		if minio.ToErrorResponse(err).Code == "NoSuchKey" {
 			return false, nil
 		}
 		return false, err
@@ -238,28 +239,11 @@ func (s *MinioStorage) Close() error {
 // 根据文件扩展名获取Content-Type
 func GetContentType(filename string) string {
 	ext := strings.ToLower(filepath.Ext(filename))
-	switch ext {
-	case ".jpg", ".jpeg":
-		return "image/jpeg"
-	case ".png":
-		return "image/png"
-	case ".gif":
-		return "image/gif"
-	case ".mp4":
-		return "video/mp4"
-	case ".webm":
-		return "video/webm"
-	case ".avi":
-		return "video/x-msvideo"
-	case ".mov":
-		return "video/quicktime"
-	case ".zip":
-		return "application/zip"
-	case ".pdf":
-		return "application/pdf"
-	default:
-		return "application/octet-stream"
+	contentType := mime.TypeByExtension(ext)
+	if contentType != "" {
+		return contentType
 	}
+	return "application/octet-stream"
 }
 
 // 生成唯一的对象名称

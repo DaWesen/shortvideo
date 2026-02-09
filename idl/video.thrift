@@ -120,6 +120,37 @@ struct HotVideoResp{
     2:list<common.Video> videos
 }
 
+struct UploadVideoReq{
+    1:i64 userId
+    2:binary videoData
+    3:binary coverData
+    4:string title
+    5:string description
+}
+
+struct UploadVideoResp{
+    1:common.BaseResp BaseResp
+    2:string videoUrl
+    3:string coverUrl
+}
+
+struct GetUserVideoCountReq{
+    1:i64 userId
+}
+
+struct GetUserVideoCountResp{
+    1:common.BaseResp BaseResp
+    2:i64 count
+}
+
+struct GetTotalVideoCountReq{
+}
+
+struct GetTotalVideoCountResp{
+    1:common.BaseResp BaseResp
+    2:i64 count
+}
+
 service VideoService{
     PublishVideoResp PublishVideo(1:PublishVideoReq req)
     UserVideoListResp GetUserVideoList(1:UserVideoListReq req)
@@ -131,4 +162,7 @@ service VideoService{
     UpdateVideoInfoResp UpdateVideoInfo(1:UpdateVideoInfoReq req)
     VideoStatsResp GetVideoStats(1:VideoStatsReq req)
     HotVideoResp GetHotVideos(1:HotVideoReq req)
+    UploadVideoResp UploadVideo(1:UploadVideoReq req)
+    GetUserVideoCountResp GetUserVideoCount(1:GetUserVideoCountReq req)
+    GetTotalVideoCountResp GetTotalVideoCount(1:GetTotalVideoCountReq req)
 }

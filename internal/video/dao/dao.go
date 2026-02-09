@@ -19,6 +19,7 @@ type VideoRepository interface {
 	ListFeedVideos(ctx context.Context, latestTime int64, pageSize int) ([]*model.Video, error)
 	Search(ctx context.Context, keyword string, page, pageSize int) ([]*model.Video, int64, error)
 	CountByAuthorID(ctx context.Context, authorID int64) (int64, error)
+	GetTotalVideoCount(ctx context.Context) (int64, error)
 	GetStats(ctx context.Context, videoID int64) (*model.VideoStats, error)
 	UpdateLikeCount(ctx context.Context, videoID int64, delta int64) error
 	UpdateCommentCount(ctx context.Context, videoID int64, delta int64) error
@@ -189,4 +190,10 @@ func (r *videoRepositoryImpl) WithTransaction(ctx context.Context, fn func(txRep
 		txRepo := &videoRepositoryImpl{db: tx}
 		return fn(txRepo)
 	})
+}
+
+func (r *videoRepositoryImpl) GetTotalVideoCount(ctx context.Context) (int64, error) {
+	var count int64
+	err := r.db.WithContext(ctx).Model(&model.Video{}).Count(&count).Error
+	return count, err
 }
