@@ -7,6 +7,12 @@ else
     RUNTIME_ROOT=${CURDIR}
 fi
 
+if [ "X$2" != "X" ]; then
+    SERVICE_NAME=$2
+else
+    SERVICE_NAME="gateway"
+fi
+
 export KITEX_RUNTIME_ROOT=$RUNTIME_ROOT
 export KITEX_LOG_DIR="$RUNTIME_ROOT/log"
 
@@ -18,4 +24,4 @@ if [ ! -d "$KITEX_LOG_DIR/rpc" ]; then
     mkdir -p "$KITEX_LOG_DIR/rpc"
 fi
 
-exec "$CURDIR/bin/user"
+exec "$CURDIR/bin/${SERVICE_NAME}"

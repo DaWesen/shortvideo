@@ -110,3 +110,12 @@ websocket:
   allow_origins:
     - "*"
   buffer_size: 4096
+
+etcd:
+  endpoints:
+    - "localhost:2379"
+  dial_timeout: "5s"
+  username: ""
+  password: ""
+  ttl: 30
+  enable_secure: false

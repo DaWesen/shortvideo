@@ -11,6 +11,10 @@ import (
 	"shortvideo/pkg/database"
 	"shortvideo/pkg/mq"
 	"shortvideo/pkg/storage"
+
+	"github.com/cloudwego/kitex/pkg/rpcinfo"
+	"github.com/cloudwego/kitex/server"
+	registry_etcd "github.com/kitex-contrib/registry-etcd"
 )
 
 func main() {
@@ -53,10 +57,25 @@ func main() {
 	//初始化处理器
 	videoHandler := handler.NewVideoService(videoService)
 
+	//创建ETCD注册器
+	registry, err := registry_etcd.NewEtcdRegistry(cfg.Etcd.Endpoints)
+	if err != nil {
+		log.Fatalf("初始化ETCD注册器失败: %v", err)
+	}
+
+	//创建服务选项
+	serverOpts := []server.Option{
+		server.WithRegistry(registry),
+		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
+			ServiceName: "video",
+		}),
+	}
+
 	//创建服务
-	svr := video.NewServer(videoHandler)
+	svr := video.NewServer(videoHandler, serverOpts...)
 
 	//启动服务
+	log.Printf("视频服务启动，端口: %d", cfg.Ports.Video)
 	err = svr.Run()
 	if err != nil {
 		log.Println(err.Error())

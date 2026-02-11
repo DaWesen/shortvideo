@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-RUN_NAME="video"
+RUN_NAME="gateway"
 
 mkdir -p output/bin
 cp script/* output/
 chmod +x output/bootstrap.sh
 
 if [ "$IS_SYSTEM_TEST_ENV" != "1" ]; then
-    go build -o output/bin/${RUN_NAME}
+    go build -o output/bin/${RUN_NAME} ./cmd/gateway
 else
-    go test -c -covermode=set -o output/bin/${RUN_NAME} -coverpkg=./...
+    go test -c -covermode=set -o output/bin/${RUN_NAME} -coverpkg=./... ./cmd/gateway
 fi

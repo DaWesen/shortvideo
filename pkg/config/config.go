@@ -29,6 +29,7 @@ type Config struct {
 	Prometheus    PrometheusConfig    `mapstructure:"prometheus"`
 	Tracing       TracingConfig       `mapstructure:"tracing"`
 	WebSocket     WebSocketConfig     `mapstructure:"websocket"`
+	Etcd          EtcdConfig          `mapstructure:"etcd"`
 }
 
 // 应用配置
@@ -302,6 +303,13 @@ func setDefaults() {
 	viper.SetDefault("websocket.path", "/ws")
 	viper.SetDefault("websocket.allow_origins", []string{"*"})
 	viper.SetDefault("websocket.buffer_size", 4096)
+
+	viper.SetDefault("etcd.endpoints", []string{"localhost:2379"})
+	viper.SetDefault("etcd.dial_timeout", "5s")
+	viper.SetDefault("etcd.username", "")
+	viper.SetDefault("etcd.password", "")
+	viper.SetDefault("etcd.ttl", 30)
+	viper.SetDefault("etcd.enable_secure", false)
 }
 
 // 获取PostgreSQL连接字符串
@@ -331,4 +339,14 @@ func (a *AppConfig) IsDev() bool {
 // 是否为生产环境
 func (a *AppConfig) IsProd() bool {
 	return a.Env == "prod" || a.Env == "production"
+}
+
+// Etcd配置
+type EtcdConfig struct {
+	Endpoints    []string `mapstructure:"endpoints"`
+	DialTimeout  string   `mapstructure:"dial_timeout"`
+	Username     string   `mapstructure:"username"`
+	Password     string   `mapstructure:"password"`
+	TTL          int      `mapstructure:"ttl"`
+	EnableSecure bool     `mapstructure:"enable_secure"`
 }

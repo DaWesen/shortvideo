@@ -14,6 +14,10 @@ import (
 	"shortvideo/pkg/database"
 	"shortvideo/pkg/mq"
 	"shortvideo/pkg/storage"
+
+	"github.com/cloudwego/kitex/pkg/rpcinfo"
+	"github.com/cloudwego/kitex/server"
+	registry_etcd "github.com/kitex-contrib/registry-etcd"
 )
 
 func main() {
@@ -66,10 +70,25 @@ func main() {
 	//初始化处理器
 	interactionHandler := handler.NewInteractionService(interactionService)
 
+	//创建ETCD注册器
+	registry, err := registry_etcd.NewEtcdRegistry(cfg.Etcd.Endpoints)
+	if err != nil {
+		log.Fatalf("初始化ETCD注册器失败: %v", err)
+	}
+
+	//创建服务选项
+	serverOpts := []server.Option{
+		server.WithRegistry(registry),
+		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
+			ServiceName: "interaction",
+		}),
+	}
+
 	//创建服务
-	svr := interactionservice.NewServer(interactionHandler)
+	svr := interactionservice.NewServer(interactionHandler, serverOpts...)
 
 	//启动服务
+	log.Printf("交互服务启动，端口: %d", cfg.Ports.Interaction)
 	err = svr.Run()
 	if err != nil {
 		log.Println(err.Error())

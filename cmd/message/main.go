@@ -2,19 +2,22 @@ package main
 
 import (
 	"log"
-
 	"shortvideo/internal/message/dao"
 	"shortvideo/internal/message/handler"
 	"shortvideo/internal/message/service"
 	userDao "shortvideo/internal/user/dao"
 	userService "shortvideo/internal/user/service"
-	messageservice "shortvideo/kitex_gen/message/messageservice"
+	"shortvideo/kitex_gen/message/messageservice"
 	"shortvideo/pkg/cache"
 	"shortvideo/pkg/config"
 	"shortvideo/pkg/database"
 	"shortvideo/pkg/jwt"
 	"shortvideo/pkg/mq"
 	"shortvideo/pkg/storage"
+
+	"github.com/cloudwego/kitex/pkg/rpcinfo"
+	"github.com/cloudwego/kitex/server"
+	registry_etcd "github.com/kitex-contrib/registry-etcd"
 )
 
 func main() {
@@ -67,10 +70,25 @@ func main() {
 	//初始化处理器
 	messageHandler := handler.NewMessageService(messageService)
 
+	//创建ETCD注册器
+	registry, err := registry_etcd.NewEtcdRegistry(cfg.Etcd.Endpoints)
+	if err != nil {
+		log.Fatalf("初始化ETCD注册器失败: %v", err)
+	}
+
+	//创建服务选项
+	serverOpts := []server.Option{
+		server.WithRegistry(registry),
+		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
+			ServiceName: "message",
+		}),
+	}
+
 	//创建服务
-	svr := messageservice.NewServer(messageHandler)
+	svr := messageservice.NewServer(messageHandler, serverOpts...)
 
 	//启动服务
+	log.Printf("消息服务启动，端口: %d", cfg.Ports.Message)
 	err = svr.Run()
 	if err != nil {
 		log.Println(err.Error())
