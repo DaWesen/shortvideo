@@ -43,6 +43,11 @@ func main() {
 	}
 	log.Printf("服务客户端初始化完成")
 
+	//初始化WebSocket管理器
+	log.Printf("初始化WebSocket管理器...")
+	handler.InitWSManager()
+	log.Printf("WebSocket管理器初始化完成")
+
 	//创建HTTP处理器
 	log.Printf("创建HTTP处理器...")
 	httpHandler := handler.NewHTTPHandler(serviceClients)

@@ -12,11 +12,11 @@ require (
 	github.com/cloudwego/kitex v0.16.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-jwt/jwt/v5 v5.2.2
+	github.com/hertz-contrib/websocket v0.2.0
 	github.com/kitex-contrib/registry-etcd v0.3.0
 	github.com/minio/minio-go/v7 v7.0.98
 	github.com/segmentio/kafka-go v0.20.0
 	github.com/spf13/viper v1.21.0
-	go.etcd.io/etcd/client/v3 v3.6.2
 	go.uber.org/zap v1.27.1
 	golang.org/x/crypto v0.46.0
 	gorm.io/driver/postgres v1.6.0
@@ -88,6 +88,7 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	go.etcd.io/etcd/api/v3 v3.6.2 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.6.2 // indirect
+	go.etcd.io/etcd/client/v3 v3.6.2 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/arch v0.14.0 // indirect

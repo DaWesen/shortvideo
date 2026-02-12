@@ -92,5 +92,8 @@ func RegisterRoutes(
 		protected.GET("/recommend/videos", httpHandler.GetRecommendedVideos)
 	}
 
+	//WebSocket路由
+	srv.GET("/ws", httpHandler.HandleWebSocket)
+
 	hlog.Info("路由注册完成")
 }
