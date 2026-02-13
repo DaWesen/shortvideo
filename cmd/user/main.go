@@ -32,15 +32,12 @@ func main() {
 	}
 
 	//初始化Redis
-	redisClient, err := cache.InitRedis(cfg.Redis)
-	if err != nil {
-		log.Fatalf("初始化Redis失败: %v", err)
-	}
+	redisClient := cache.NewRedisCache()
 
 	//初始化Kafka生产者
-	kafkaProducer, err := mq.InitProducer(cfg.Kafka.Brokers, cfg.Kafka.Version)
-	if err != nil {
-		log.Fatalf("初始化Kafka生产者失败: %v", err)
+	kafkaProducer := mq.NewProducer()
+	if kafkaProducer == nil {
+		log.Fatalf("初始化Kafka生产者失败")
 	}
 
 	//初始化MinIO

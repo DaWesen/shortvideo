@@ -38,6 +38,10 @@ func NewProducer() *Producer {
 	producerOnce.Do(func() {
 		kafkaConfig := config.Get().Kafka
 		producerInstance, _ = InitProducer(kafkaConfig.Brokers, kafkaConfig.Version)
+		ctx := context.Background()
+		if err := CreateTopics(ctx); err != nil {
+			log.Printf("创建Kafka主题失败: %v", err)
+		}
 	})
 	return producerInstance
 }

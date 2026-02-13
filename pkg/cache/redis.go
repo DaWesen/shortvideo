@@ -96,27 +96,7 @@ func InitRedis(redisConfig config.RedisConfig) (Cache, error) {
 	return &RedisCache{client: client}, nil
 }
 
-func initRedisClient() *redis.Client {
-	cfg := config.Get()
-	client := redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%d", cfg.Redis.Host, cfg.Redis.Port),
-		Password: cfg.Redis.Password,
-		DB:       cfg.Redis.DB,
-		PoolSize: cfg.Redis.PoolSize,
-	})
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	_, err := client.Ping(ctx).Result()
-	if err != nil {
-		fmt.Printf("Redis连接失败: %v\n", err)
-	} else {
-		fmt.Println("Redis连接成功")
-	}
-
-	return client
-}
 
 // 设置键值对
 func (c *RedisCache) Set(ctx context.Context, key string, value interface{}, expiration time.Duration) error {
