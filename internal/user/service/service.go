@@ -9,6 +9,7 @@ import (
 	"shortvideo/internal/user/dao"
 	"shortvideo/internal/user/model"
 	"shortvideo/pkg/cache"
+	"shortvideo/pkg/es"
 	"shortvideo/pkg/jwt"
 	"shortvideo/pkg/logger"
 	"shortvideo/pkg/mq"
@@ -67,15 +68,18 @@ type userServiceImpl struct {
 	storage       storage.Storage
 	kafkaProducer *mq.Producer
 	cache         cache.Cache
+	es            *es.ESManager
 }
 
-func NewUserService(repo dao.UserRepository, jwtManager *jwt.JWTManager, storage storage.Storage, kafkaProducer *mq.Producer, cache cache.Cache) UserService {
+func NewUserService(repo dao.UserRepository, jwtManager *jwt.JWTManager, storage storage.Storage,
+	kafkaProducer *mq.Producer, cache cache.Cache, es *es.ESManager) UserService {
 	return &userServiceImpl{
 		repo:          repo,
 		jwtManager:    jwtManager,
 		storage:       storage,
 		kafkaProducer: kafkaProducer,
 		cache:         cache,
+		es:            es,
 	}
 }
 
@@ -86,6 +90,7 @@ func NewUserServiceWithRepo(repo dao.UserRepository, jwtManager *jwt.JWTManager)
 		storage:       nil,
 		kafkaProducer: nil,
 		cache:         nil,
+		es:            nil,
 	}
 }
 
@@ -148,6 +153,25 @@ func (s *userServiceImpl) Register(ctx context.Context, username, password, avat
 		s.kafkaProducer.SendUserEvent(ctx, fmt.Sprintf("%d", user.ID), eventData)
 		logger.Info("发送用户注册事件",
 			logger.Int64Field("user_id", user.ID))
+	}
+
+	//将用户信息同步到Elasticsearch
+	if s.es != nil {
+		esUser := map[string]interface{}{
+			"id":             user.ID,
+			"username":       user.Username,
+			"avatar":         user.Avatar,
+			"about":          user.About,
+			"follow_count":   user.FollowCount,
+			"follower_count": user.FollowerCount,
+			"created_at":     user.CreatedAt.Format("2006-01-02 15:04:05"),
+		}
+		err = s.es.AddDocument("users", fmt.Sprintf("%d", user.ID), esUser)
+		if err != nil {
+			logger.Error("同步用户到ES失败",
+				logger.ErrorField(err),
+				logger.Int64Field("user_id", user.ID))
+		}
 	}
 
 	logger.Info("用户注册成功",
@@ -333,6 +357,28 @@ func (s *userServiceImpl) UpdateUser(ctx context.Context, userID int64, avatar, 
 			logger.Int64Field("user_id", userID))
 	}
 
+	//将更新后的用户信息同步到Elasticsearch
+	if s.es != nil {
+		updatedUser, err := s.repo.FindByID(ctx, userID)
+		if err == nil && updatedUser != nil {
+			esUser := map[string]interface{}{
+				"id":             updatedUser.ID,
+				"username":       updatedUser.Username,
+				"avatar":         updatedUser.Avatar,
+				"about":          updatedUser.About,
+				"follow_count":   updatedUser.FollowCount,
+				"follower_count": updatedUser.FollowerCount,
+				"created_at":     updatedUser.CreatedAt.Format("2006-01-02 15:04:05"),
+			}
+			err = s.es.UpdateDocument("users", fmt.Sprintf("%d", userID), esUser)
+			if err != nil {
+				logger.Error("更新用户到ES失败",
+					logger.ErrorField(err),
+					logger.Int64Field("user_id", userID))
+			}
+		}
+	}
+
 	logger.Info("更新用户信息成功",
 		logger.Int64Field("user_id", userID))
 
@@ -374,6 +420,78 @@ func (s *userServiceImpl) GetUserCount(ctx context.Context) (int64, error) {
 
 // 搜索用户
 func (s *userServiceImpl) SearchUsers(ctx context.Context, keyword string, page, pageSize int) ([]*model.User, int64, error) {
+	//优先使用Elasticsearch进行搜索
+	if s.es != nil {
+		//构建搜索查询
+		query := es.SearchQuery{
+			Query: map[string]interface{}{
+				"multi_match": map[string]interface{}{
+					"query":    keyword,
+					"fields":   []string{"username", "about"},
+					"type":     "best_fields",
+					"operator": "and",
+				},
+			},
+			From: (page - 1) * pageSize,
+			Size: pageSize,
+			Sort: []map[string]interface{}{
+				{
+					"follower_count": map[string]interface{}{
+						"order": "desc",
+					},
+				},
+				{
+					"created_at": map[string]interface{}{
+						"order": "desc",
+					},
+				},
+			},
+		}
+
+		var searchResult es.SearchResult
+		err := s.es.Search("users", query, &searchResult)
+		if err == nil {
+			//解析搜索结果
+			var users []*model.User
+			for _, hit := range searchResult.Hits.Hits {
+				var esUser map[string]interface{}
+				if json.Unmarshal(hit, &esUser) == nil {
+					source, ok := esUser["_source"].(map[string]interface{})
+					if ok {
+						user := &model.User{}
+						//从ES结果中提取用户信息
+						if id, ok := source["id"].(float64); ok {
+							user.ID = int64(id)
+						}
+						if username, ok := source["username"].(string); ok {
+							user.Username = username
+						}
+						if avatar, ok := source["avatar"].(string); ok {
+							user.Avatar = avatar
+						}
+						if about, ok := source["about"].(string); ok {
+							user.About = about
+						}
+						if followCount, ok := source["follow_count"].(float64); ok {
+							user.FollowCount = int64(followCount)
+						}
+						if followerCount, ok := source["follower_count"].(float64); ok {
+							user.FollowerCount = int64(followerCount)
+						}
+						if createdAt, ok := source["created_at"].(string); ok {
+							if t, err := time.Parse("2006-01-02 15:04:05", createdAt); err == nil {
+								user.CreatedAt = t
+							}
+						}
+						users = append(users, user)
+					}
+				}
+			}
+			return users, searchResult.Hits.Total.Value, nil
+		}
+	}
+
+	//如果ES搜索失败，回退到数据库搜索
 	users, total, err := s.repo.Search(ctx, keyword, page, pageSize)
 	if err != nil {
 		return nil, 0, ErrInternalServer

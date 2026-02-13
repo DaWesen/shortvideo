@@ -8,6 +8,7 @@ import (
 	"shortvideo/internal/live/model"
 	"shortvideo/kitex_gen/common"
 	"shortvideo/kitex_gen/live"
+	"shortvideo/pkg/es"
 	"shortvideo/pkg/logger"
 	"time"
 )
@@ -50,6 +51,7 @@ type liveServiceImpl struct {
 	roomAdminRepo  dao.RoomAdminRepository
 	liveRecordRepo dao.LiveRecordRepository
 	roomViewerRepo dao.RoomViewerRepository
+	es             *es.ESManager
 }
 
 func NewLiveService(
@@ -59,6 +61,7 @@ func NewLiveService(
 	roomAdminRepo dao.RoomAdminRepository,
 	liveRecordRepo dao.LiveRecordRepository,
 	roomViewerRepo dao.RoomViewerRepository,
+	es *es.ESManager,
 ) LiveService {
 	return &liveServiceImpl{
 		roomRepo:       roomRepo,
@@ -67,6 +70,7 @@ func NewLiveService(
 		roomAdminRepo:  roomAdminRepo,
 		liveRecordRepo: liveRecordRepo,
 		roomViewerRepo: roomViewerRepo,
+		es:             es,
 	}
 }
 
@@ -85,6 +89,7 @@ func NewLiveServiceWithRepo(
 		roomAdminRepo:  roomAdminRepo,
 		liveRecordRepo: liveRecordRepo,
 		roomViewerRepo: roomViewerRepo,
+		es:             nil,
 	}
 }
 
@@ -128,6 +133,25 @@ func (s *liveServiceImpl) CreateLiveRoom(ctx context.Context, hostID int64, titl
 			logger.Int64Field("host_id", hostID),
 			logger.StringField("title", title))
 		return nil, ErrInternalServer
+	}
+
+	//将直播间信息同步到Elasticsearch
+	if s.es != nil {
+		esRoom := map[string]interface{}{
+			"id":           room.ID,
+			"host_id":      room.HostID,
+			"title":        room.Title,
+			"cover_url":    room.CoverURL,
+			"viewer_count": room.ViewerCount,
+			"is_live":      room.IsLive,
+			"created_at":   room.CreateTime,
+		}
+		err = s.es.AddDocument("lives", fmt.Sprintf("%d", room.ID), esRoom)
+		if err != nil {
+			logger.Error("同步直播间到ES失败",
+				logger.ErrorField(err),
+				logger.Int64Field("room_id", room.ID))
+		}
 	}
 
 	logger.Info("创建直播间成功",
@@ -188,6 +212,28 @@ func (s *liveServiceImpl) StartLive(ctx context.Context, hostID, roomID int64, r
 		return ErrInternalServer
 	}
 
+	//更新Elasticsearch中的直播状态
+	if s.es != nil {
+		updatedRoom, err := s.roomRepo.FindByID(ctx, roomID)
+		if err == nil && updatedRoom != nil {
+			esRoom := map[string]interface{}{
+				"id":           updatedRoom.ID,
+				"host_id":      updatedRoom.HostID,
+				"title":        updatedRoom.Title,
+				"cover_url":    updatedRoom.CoverURL,
+				"viewer_count": updatedRoom.ViewerCount,
+				"is_live":      updatedRoom.IsLive,
+				"created_at":   updatedRoom.CreateTime,
+			}
+			err = s.es.UpdateDocument("lives", fmt.Sprintf("%d", roomID), esRoom)
+			if err != nil {
+				logger.Error("更新直播间到ES失败",
+					logger.ErrorField(err),
+					logger.Int64Field("room_id", roomID))
+			}
+		}
+	}
+
 	logger.Info("开始直播成功",
 		logger.Int64Field("room_id", roomID),
 		logger.Int64Field("host_id", hostID))
@@ -240,6 +286,28 @@ func (s *liveServiceImpl) StopLive(ctx context.Context, hostID, roomID int64) er
 		logger.Error("重置观众数失败",
 			logger.ErrorField(err),
 			logger.Int64Field("room_id", roomID))
+	}
+
+	//更新Elasticsearch中的直播状态
+	if s.es != nil {
+		updatedRoom, err := s.roomRepo.FindByID(ctx, roomID)
+		if err == nil && updatedRoom != nil {
+			esRoom := map[string]interface{}{
+				"id":           updatedRoom.ID,
+				"host_id":      updatedRoom.HostID,
+				"title":        updatedRoom.Title,
+				"cover_url":    updatedRoom.CoverURL,
+				"viewer_count": updatedRoom.ViewerCount,
+				"is_live":      updatedRoom.IsLive,
+				"created_at":   updatedRoom.CreateTime,
+			}
+			err = s.es.UpdateDocument("lives", fmt.Sprintf("%d", roomID), esRoom)
+			if err != nil {
+				logger.Error("更新直播间到ES失败",
+					logger.ErrorField(err),
+					logger.Int64Field("room_id", roomID))
+			}
+		}
 	}
 
 	logger.Info("停止直播成功",

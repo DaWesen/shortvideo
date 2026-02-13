@@ -12,6 +12,7 @@ import (
 	"shortvideo/pkg/cache"
 	"shortvideo/pkg/config"
 	"shortvideo/pkg/database"
+	"shortvideo/pkg/es"
 	"shortvideo/pkg/mq"
 	"shortvideo/pkg/storage"
 
@@ -48,11 +49,17 @@ func main() {
 		log.Fatalf("初始化MinIO失败: %v", err)
 	}
 
+	//初始化Elasticsearch
+	esClient, err := es.NewESManager()
+	if err != nil {
+		log.Printf("初始化Elasticsearch客户端失败: %v，服务将继续运行", err)
+	}
+
 	//初始化视频DAO
 	videoRepo := videoDao.NewVideoRepository(db)
 
 	//初始化视频服务
-	videoService := videoService.NewVideoService(videoRepo, minioClient, kafkaProducer, redisClient)
+	videoService := videoService.NewVideoService(videoRepo, minioClient, kafkaProducer, redisClient, esClient)
 
 	//初始化互动DAO
 	likeRepo := dao.NewLikeRepository(db)

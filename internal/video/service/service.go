@@ -9,6 +9,7 @@ import (
 	"shortvideo/internal/video/dao"
 	"shortvideo/internal/video/model"
 	"shortvideo/pkg/cache"
+	"shortvideo/pkg/es"
 	"shortvideo/pkg/logger"
 	"shortvideo/pkg/mq"
 	"shortvideo/pkg/storage"
@@ -76,20 +77,23 @@ type videoServiceImpl struct {
 	storage       storage.Storage
 	kafkaProducer *mq.Producer
 	cache         cache.Cache
+	es            *es.ESManager
 }
 
-func NewVideoService(repo dao.VideoRepository, storage storage.Storage, kafkaProducer *mq.Producer, cache cache.Cache) VideoService {
+func NewVideoService(repo dao.VideoRepository, storage storage.Storage, kafkaProducer *mq.Producer, cache cache.Cache, es *es.ESManager) VideoService {
 	return &videoServiceImpl{
 		repo:          repo,
 		storage:       storage,
 		kafkaProducer: kafkaProducer,
 		cache:         cache,
+		es:            es,
 	}
 }
 
 func NewVideoServiceWithRepo(repo dao.VideoRepository) VideoService {
 	return &videoServiceImpl{
 		repo: repo,
+		es:   nil,
 	}
 }
 
@@ -167,6 +171,29 @@ func (s *videoServiceImpl) UploadVideo(ctx context.Context, userID int64, videoD
 		logger.Info("发送视频上传事件",
 			logger.Int64Field("video_id", video.ID),
 			logger.Int64Field("user_id", userID))
+	}
+
+	//将视频信息同步到Elasticsearch
+	if s.es != nil {
+		esVideo := map[string]interface{}{
+			"id":            video.ID,
+			"user_id":       video.AuthorID,
+			"title":         video.Title,
+			"description":   video.Description,
+			"cover_url":     video.CoverURL,
+			"video_url":     video.URL,
+			"view_count":    video.ViewCount,
+			"like_count":    video.LikeCount,
+			"comment_count": video.CommentCount,
+			"share_count":   video.ShareCount,
+			"created_at":    time.Now().Format("2006-01-02 15:04:05"),
+		}
+		err = s.es.AddDocument("videos", fmt.Sprintf("%d", video.ID), esVideo)
+		if err != nil {
+			logger.Error("同步视频到ES失败",
+				logger.ErrorField(err),
+				logger.Int64Field("video_id", video.ID))
+		}
 	}
 
 	logger.Info("视频上传成功",
@@ -292,6 +319,32 @@ func (s *videoServiceImpl) UpdateVideo(ctx context.Context, videoID int64, userI
 			logger.Int64Field("user_id", userID))
 	}
 
+	//将更新后的视频信息同步到Elasticsearch
+	if s.es != nil {
+		updatedVideo, err := s.repo.FindByID(ctx, videoID)
+		if err == nil && updatedVideo != nil {
+			esVideo := map[string]interface{}{
+				"id":            updatedVideo.ID,
+				"user_id":       updatedVideo.AuthorID,
+				"title":         updatedVideo.Title,
+				"description":   updatedVideo.Description,
+				"cover_url":     updatedVideo.CoverURL,
+				"video_url":     updatedVideo.URL,
+				"view_count":    updatedVideo.ViewCount,
+				"like_count":    updatedVideo.LikeCount,
+				"comment_count": updatedVideo.CommentCount,
+				"share_count":   updatedVideo.ShareCount,
+				"created_at":    time.Unix(updatedVideo.PublishTime, 0).Format("2006-01-02 15:04:05"),
+			}
+			err = s.es.UpdateDocument("videos", fmt.Sprintf("%d", videoID), esVideo)
+			if err != nil {
+				logger.Error("更新视频到ES失败",
+					logger.ErrorField(err),
+					logger.Int64Field("video_id", videoID))
+			}
+		}
+	}
+
 	logger.Info("更新视频信息成功",
 		logger.Int64Field("video_id", videoID),
 		logger.Int64Field("user_id", userID),
@@ -355,6 +408,16 @@ func (s *videoServiceImpl) DeleteVideo(ctx context.Context, videoID int64, userI
 		logger.Info("发送视频删除事件",
 			logger.Int64Field("video_id", videoID),
 			logger.Int64Field("user_id", userID))
+	}
+
+	//从Elasticsearch中删除视频文档
+	if s.es != nil {
+		err = s.es.DeleteDocument("videos", fmt.Sprintf("%d", videoID))
+		if err != nil {
+			logger.Error("从ES删除视频失败",
+				logger.ErrorField(err),
+				logger.Int64Field("video_id", videoID))
+		}
 	}
 
 	logger.Info("删除视频成功",
@@ -426,6 +489,95 @@ func (s *videoServiceImpl) SearchVideos(ctx context.Context, keyword string, cur
 		logger.IntField("page", page),
 		logger.IntField("page_size", pageSize))
 
+	//优先使用Elasticsearch进行搜索
+	if s.es != nil {
+		//构建搜索查询
+		query := es.SearchQuery{
+			Query: map[string]interface{}{
+				"multi_match": map[string]interface{}{
+					"query":    keyword,
+					"fields":   []string{"title", "description"},
+					"type":     "best_fields",
+					"operator": "and",
+				},
+			},
+			From: (page - 1) * pageSize,
+			Size: pageSize,
+			Sort: []map[string]interface{}{
+				{
+					"view_count": map[string]interface{}{
+						"order": "desc",
+					},
+				},
+				{
+					"created_at": map[string]interface{}{
+						"order": "desc",
+					},
+				},
+			},
+		}
+
+		var searchResult es.SearchResult
+		err := s.es.Search("videos", query, &searchResult)
+		if err == nil {
+			//解析搜索结果
+			var videos []*model.Video
+			for _, hit := range searchResult.Hits.Hits {
+				var esVideo map[string]interface{}
+				if json.Unmarshal(hit, &esVideo) == nil {
+					source, ok := esVideo["_source"].(map[string]interface{})
+					if ok {
+						video := &model.Video{}
+						//从ES结果中提取视频信息
+						if id, ok := source["id"].(float64); ok {
+							video.ID = int64(id)
+						}
+						if userID, ok := source["user_id"].(float64); ok {
+							video.AuthorID = int64(userID)
+						}
+						if title, ok := source["title"].(string); ok {
+							video.Title = title
+						}
+						if description, ok := source["description"].(string); ok {
+							video.Description = description
+						}
+						if coverURL, ok := source["cover_url"].(string); ok {
+							video.CoverURL = coverURL
+						}
+						if videoURL, ok := source["video_url"].(string); ok {
+							video.URL = videoURL
+						}
+						if viewCount, ok := source["view_count"].(float64); ok {
+							video.ViewCount = int64(viewCount)
+						}
+						if likeCount, ok := source["like_count"].(float64); ok {
+							video.LikeCount = int64(likeCount)
+						}
+						if commentCount, ok := source["comment_count"].(float64); ok {
+							video.CommentCount = int64(commentCount)
+						}
+						if shareCount, ok := source["share_count"].(float64); ok {
+							video.ShareCount = int64(shareCount)
+						}
+						if createdAt, ok := source["created_at"].(string); ok {
+							if t, err := time.Parse("2006-01-02 15:04:05", createdAt); err == nil {
+								video.PublishTime = t.Unix()
+							}
+						}
+						videos = append(videos, video)
+					}
+				}
+			}
+			logger.Info("从ES搜索视频成功",
+				logger.StringField("keyword", keyword),
+				logger.Int64Field("current_user_id", currentUserID),
+				logger.IntField("video_count", len(videos)),
+				logger.Int64Field("total_count", searchResult.Hits.Total.Value))
+			return videos, searchResult.Hits.Total.Value, nil
+		}
+	}
+
+	//如果ES搜索失败，回退到数据库搜索
 	videos, total, err := s.repo.Search(ctx, keyword, page, pageSize)
 	if err != nil {
 		logger.Error("搜索视频失败",

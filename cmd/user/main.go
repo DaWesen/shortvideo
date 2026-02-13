@@ -9,6 +9,7 @@ import (
 	"shortvideo/pkg/cache"
 	"shortvideo/pkg/config"
 	"shortvideo/pkg/database"
+	"shortvideo/pkg/es"
 	"shortvideo/pkg/jwt"
 	"shortvideo/pkg/mq"
 	"shortvideo/pkg/storage"
@@ -49,11 +50,23 @@ func main() {
 	//初始化JWT管理器
 	jwtManager := jwt.NewJWTManagerWithConfig(cfg.JWT.Secret, cfg.JWT.ExpireHours)
 
+	//初始化Elasticsearch
+	esClient, err := es.NewESManager()
+	if err != nil {
+		log.Printf("初始化Elasticsearch客户端失败: %v，服务将继续运行", err)
+	} else {
+		//创建用户索引
+		userMapping := es.GenerateUserMapping()
+		if err := esClient.CreateIndex("users", userMapping); err != nil {
+			log.Printf("创建用户索引失败: %v", err)
+		}
+	}
+
 	//初始化用户DAO
 	userRepo := dao.NewUserRepository(db)
 
 	//初始化用户服务
-	userService := service.NewUserService(userRepo, jwtManager, minioClient, kafkaProducer, redisClient)
+	userService := service.NewUserService(userRepo, jwtManager, minioClient, kafkaProducer, redisClient, esClient)
 
 	//初始化处理器
 	userHandler := handler.NewUserService(userService)

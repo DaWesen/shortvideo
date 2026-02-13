@@ -11,6 +11,8 @@ type Video struct {
 	CoverURL     string    `gorm:"type:varchar(500);comment:封面地址"`
 	LikeCount    int64     `gorm:"default:0;comment:点赞数"`
 	CommentCount int64     `gorm:"default:0;comment:评论数"`
+	ViewCount    int64     `gorm:"default:0;comment:观看数"`
+	ShareCount   int64     `gorm:"default:0;comment:分享数"`
 	Title        string    `gorm:"size:200;not null;comment:标题"`
 	PublishTime  int64     `gorm:"index;not null;comment:发布时间戳"`
 	Description  string    `gorm:"type:text;comment:描述"`

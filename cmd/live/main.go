@@ -9,6 +9,7 @@ import (
 	live "shortvideo/kitex_gen/live/liveservice"
 	"shortvideo/pkg/config"
 	"shortvideo/pkg/database"
+	"shortvideo/pkg/es"
 	"shortvideo/pkg/logger"
 
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -37,6 +38,18 @@ func main() {
 	liveRecordRepo := dao.NewLiveRecordRepository(db)
 	roomViewerRepo := dao.NewRoomViewerRepository(db)
 
+	//初始化Elasticsearch
+	esClient, err := es.NewESManager()
+	if err != nil {
+		log.Printf("初始化Elasticsearch客户端失败: %v，服务将继续运行", err)
+	} else {
+		//创建直播间索引
+		liveMapping := es.GenerateLiveMapping()
+		if err := esClient.CreateIndex("lives", liveMapping); err != nil {
+			log.Printf("创建直播间索引失败: %v", err)
+		}
+	}
+
 	//初始化直播服务
 	liveService := service.NewLiveService(
 		roomRepo,
@@ -45,6 +58,7 @@ func main() {
 		roomAdminRepo,
 		liveRecordRepo,
 		roomViewerRepo,
+		esClient,
 	)
 
 	//初始化处理器

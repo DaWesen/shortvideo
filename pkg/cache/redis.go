@@ -96,8 +96,6 @@ func InitRedis(redisConfig config.RedisConfig) (Cache, error) {
 	return &RedisCache{client: client}, nil
 }
 
-
-
 // 设置键值对
 func (c *RedisCache) Set(ctx context.Context, key string, value interface{}, expiration time.Duration) error {
 	return c.client.Set(ctx, key, value, expiration).Err()
