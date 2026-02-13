@@ -13,6 +13,8 @@ import (
 	"shortvideo/internal/gateway/middleware"
 	"shortvideo/internal/gateway/router"
 	"shortvideo/pkg/config"
+	"shortvideo/pkg/prometheus"
+	"shortvideo/pkg/tracing"
 
 	"github.com/cloudwego/hertz/pkg/app/server"
 )
@@ -33,6 +35,24 @@ func main() {
 		log.Fatalf("配置实例初始化失败: %v", err)
 	}
 	log.Printf("配置实例初始化成功")
+
+	//初始化Prometheus监控
+	log.Printf("初始化Prometheus监控...")
+	_, err = prometheus.NewPrometheusManager()
+	if err != nil {
+		log.Printf("警告: Prometheus初始化失败: %v", err)
+	} else {
+		log.Printf("Prometheus监控初始化成功")
+	}
+
+	//初始化分布式链路追踪
+	log.Printf("初始化分布式链路追踪...")
+	_, err = tracing.NewTracingManager()
+	if err != nil {
+		log.Printf("警告: Tracing初始化失败: %v", err)
+	} else {
+		log.Printf("分布式链路追踪初始化成功")
+	}
 
 	//初始化服务客户端
 	log.Printf("初始化服务客户端...")

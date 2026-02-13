@@ -11,7 +11,9 @@ import (
 	"shortvideo/pkg/database"
 	"shortvideo/pkg/es"
 	"shortvideo/pkg/mq"
+	"shortvideo/pkg/prometheus"
 	"shortvideo/pkg/storage"
+	"shortvideo/pkg/tracing"
 
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
@@ -56,6 +58,18 @@ func main() {
 		if err := esClient.CreateIndex("videos", videoMapping); err != nil {
 			log.Printf("创建视频索引失败: %v", err)
 		}
+	}
+
+	//初始化Prometheus监控
+	_, err = prometheus.NewPrometheusManager()
+	if err != nil {
+		log.Printf("初始化Prometheus失败: %v，服务将继续运行", err)
+	}
+
+	//初始化分布式链路追踪
+	_, err = tracing.NewTracingManager()
+	if err != nil {
+		log.Printf("初始化Tracing失败: %v，服务将继续运行", err)
 	}
 
 	//初始化视频DAO
