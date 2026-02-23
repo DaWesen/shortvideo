@@ -98,6 +98,15 @@ prometheus:
   enable: true
   port: 9090
   path: "/metrics"
+  user_port: 9091
+  video_port: 9092
+  social_port: 9093
+  interaction_port: 9094
+  message_port: 9095
+  live_port: 9096
+  danmu_port: 9097
+  recommend_port: 9098
+  gateway_port: 9099
 
 tracing:
   enable: false

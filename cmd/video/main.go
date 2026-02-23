@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net"
 	"shortvideo/internal/video/dao"
 	"shortvideo/internal/video/handler"
 	"shortvideo/internal/video/service"
@@ -61,7 +62,7 @@ func main() {
 	}
 
 	//初始化Prometheus监控
-	_, err = prometheus.NewPrometheusManager()
+	_, err = prometheus.NewPrometheusManager(cfg.Prometheus.VideoPort)
 	if err != nil {
 		log.Printf("初始化Prometheus失败: %v，服务将继续运行", err)
 	}
@@ -93,6 +94,7 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 			ServiceName: "video",
 		}),
+		server.WithServiceAddr(&net.TCPAddr{Port: cfg.Ports.Video}),
 	}
 
 	//创建服务

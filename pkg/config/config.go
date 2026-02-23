@@ -163,9 +163,18 @@ type JWTConfig struct {
 
 // Prometheus配置
 type PrometheusConfig struct {
-	Enable bool   `mapstructure:"enable"`
-	Port   int    `mapstructure:"port"`
-	Path   string `mapstructure:"path"`
+	Enable          bool   `mapstructure:"enable"`
+	Port            int    `mapstructure:"port"`
+	Path            string `mapstructure:"path"`
+	UserPort        int    `mapstructure:"user_port"`
+	VideoPort       int    `mapstructure:"video_port"`
+	SocialPort      int    `mapstructure:"social_port"`
+	InteractionPort int    `mapstructure:"interaction_port"`
+	MessagePort     int    `mapstructure:"message_port"`
+	LivePort        int    `mapstructure:"live_port"`
+	DanmuPort       int    `mapstructure:"danmu_port"`
+	RecommendPort   int    `mapstructure:"recommend_port"`
+	GatewayPort     int    `mapstructure:"gateway_port"`
 }
 
 // 链路追踪配置
@@ -294,6 +303,15 @@ func setDefaults() {
 	viper.SetDefault("prometheus.enable", true)
 	viper.SetDefault("prometheus.port", 9090)
 	viper.SetDefault("prometheus.path", "/metrics")
+	viper.SetDefault("prometheus.user_port", 9091)
+	viper.SetDefault("prometheus.video_port", 9092)
+	viper.SetDefault("prometheus.social_port", 9093)
+	viper.SetDefault("prometheus.interaction_port", 9094)
+	viper.SetDefault("prometheus.message_port", 9095)
+	viper.SetDefault("prometheus.live_port", 9096)
+	viper.SetDefault("prometheus.danmu_port", 9097)
+	viper.SetDefault("prometheus.recommend_port", 9098)
+	viper.SetDefault("prometheus.gateway_port", 9099)
 
 	viper.SetDefault("tracing.enable", false)
 	viper.SetDefault("tracing.jaeger_endpoint", "http://localhost:14268/api/traces")

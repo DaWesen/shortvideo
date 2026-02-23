@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net"
 
 	"shortvideo/internal/social/dao"
 	"shortvideo/internal/social/handler"
@@ -86,6 +87,7 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 			ServiceName: "social",
 		}),
+		server.WithServiceAddr(&net.TCPAddr{Port: cfg.Ports.Social}),
 	}
 
 	//创建服务

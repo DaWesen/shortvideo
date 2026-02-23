@@ -162,6 +162,11 @@ shortvideo/
 ### WebSocket接口
 - GET `/ws` - 实时通信（弹幕等）
 
+### 接口文档
+
+完整的API接口文档可通过Apifox访问：
+- [Apifox接口文档](https://s.apifox.cn/94cd11a3-30a8-41e2-8ef1-b205bf3ccad1)
+
 ## 快速开始
 
 ### 环境准备

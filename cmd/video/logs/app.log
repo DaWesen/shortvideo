@@ -1,0 +1,6 @@
+{"level":"INFO","timestamp":"2026-02-23T21:29:24.214+0800","caller":"service/service.go:458","msg":"获取视频流请求","current_user_id":0,"latest_time":0,"page_size":10}
+{"level":"INFO","timestamp":"2026-02-23T21:29:24.228+0800","caller":"service/service.go:476","msg":"获取视频流成功","current_user_id":0,"video_count":0,"next_time":1771853364}
+{"level":"INFO","timestamp":"2026-02-23T21:33:28.789+0800","caller":"service/service.go:209","msg":"获取视频详情请求","video_id":1,"current_user_id":0}
+{"level":"WARN","timestamp":"2026-02-23T21:33:28.803+0800","caller":"service/service.go:234","msg":"视频不存在","video_id":1}
+{"level":"INFO","timestamp":"2026-02-23T21:34:38.459+0800","caller":"service/service.go:486","msg":"搜索视频请求","keyword":"","current_user_id":0,"page":1,"page_size":10}
+{"level":"INFO","timestamp":"2026-02-23T21:34:38.635+0800","caller":"service/service.go:571","msg":"从ES搜索视频成功","keyword":"","current_user_id":0,"video_count":0,"total_count":0}

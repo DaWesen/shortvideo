@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net"
 	"shortvideo/internal/danmu/dao"
 	"shortvideo/internal/danmu/handler"
 	"shortvideo/internal/danmu/service"
@@ -53,6 +54,7 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 			ServiceName: "danmu",
 		}),
+		server.WithServiceAddr(&net.TCPAddr{Port: cfg.Ports.Danmu}),
 	}
 
 	//创建服务器

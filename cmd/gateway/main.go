@@ -38,7 +38,7 @@ func main() {
 
 	//初始化Prometheus监控
 	log.Printf("初始化Prometheus监控...")
-	_, err = prometheus.NewPrometheusManager()
+	_, err = prometheus.NewPrometheusManager(cfg.Prometheus.GatewayPort)
 	if err != nil {
 		log.Printf("警告: Prometheus初始化失败: %v", err)
 	} else {

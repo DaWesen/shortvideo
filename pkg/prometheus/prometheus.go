@@ -25,7 +25,7 @@ type PrometheusManager struct {
 }
 
 // 创建Prometheus管理器
-func NewPrometheusManager() (*PrometheusManager, error) {
+func NewPrometheusManager(port ...int) (*PrometheusManager, error) {
 	var err error
 	promOnce.Do(func() {
 		cfg := config.Get().Prometheus
@@ -42,17 +42,23 @@ func NewPrometheusManager() (*PrometheusManager, error) {
 
 		//如果启用了Prometheus，则启动HTTP服务器
 		if cfg.Enable {
+			// 使用提供的端口，如果没有提供则使用配置中的默认端口
+			promPort := cfg.Port
+			if len(port) > 0 && port[0] > 0 {
+				promPort = port[0]
+			}
+
 			httpHandler := promhttp.HandlerFor(registry, promhttp.HandlerOpts{})
 			mux := http.NewServeMux()
 			mux.Handle(cfg.Path, httpHandler)
 
 			promInstance.httpServer = &http.Server{
-				Addr:    fmt.Sprintf(":%d", cfg.Port),
+				Addr:    fmt.Sprintf(":%d", promPort),
 				Handler: mux,
 			}
 
 			go func() {
-				log.Printf("Prometheus监控已启动，端口: %d, 路径: %s", cfg.Port, cfg.Path)
+				log.Printf("Prometheus监控已启动，端口: %d, 路径: %s", promPort, cfg.Path)
 				if err := promInstance.httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 					log.Printf("Prometheus服务器启动失败: %v", err)
 				}

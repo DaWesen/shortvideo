@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net"
 
 	"shortvideo/internal/interaction/dao"
 	"shortvideo/internal/interaction/handler"
@@ -86,6 +87,7 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 			ServiceName: "interaction",
 		}),
+		server.WithServiceAddr(&net.TCPAddr{Port: cfg.Ports.Interaction}),
 	}
 
 	//创建服务

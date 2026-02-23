@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net"
 
 	"shortvideo/internal/recommend/dao"
 	"shortvideo/internal/recommend/handler"
@@ -56,6 +57,7 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 			ServiceName: "recommend",
 		}),
+		server.WithServiceAddr(&net.TCPAddr{Port: cfg.Ports.Recommend}),
 	}
 
 	//创建服务器

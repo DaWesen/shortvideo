@@ -1,0 +1,6 @@
+{"level":"INFO","timestamp":"2026-02-23T21:44:57.088+0800","caller":"service/service.go:67","msg":"关注操作请求","user_id":0,"target_user_id":0,"action":true}
+{"level":"INFO","timestamp":"2026-02-23T21:45:44.403+0800","caller":"service/service.go:67","msg":"关注操作请求","user_id":0,"target_user_id":0,"action":false}
+{"level":"INFO","timestamp":"2026-02-23T21:47:24.694+0800","caller":"service/service.go:153","msg":"获取关注列表请求","user_id":0,"current_user_id":0,"page":1,"page_size":10}
+{"level":"INFO","timestamp":"2026-02-23T21:47:24.717+0800","caller":"service/service.go:172","msg":"获取关注列表成功","user_id":0,"follow_count":0,"total_count":0}
+{"level":"INFO","timestamp":"2026-02-23T21:48:29.278+0800","caller":"service/service.go:182","msg":"获取粉丝列表请求","user_id":0,"current_user_id":0,"page":1,"page_size":10}
+{"level":"INFO","timestamp":"2026-02-23T21:48:29.299+0800","caller":"service/service.go:201","msg":"获取粉丝列表成功","user_id":0,"follower_count":0,"total_count":0}

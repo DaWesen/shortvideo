@@ -1,0 +1,9 @@
+{"level":"INFO","timestamp":"2026-02-23T21:50:24.075+0800","caller":"service/service.go:83","msg":"点赞操作请求","user_id":0,"video_id":0,"action":true}
+{"level":"INFO","timestamp":"2026-02-23T21:50:25.143+0800","caller":"service/service.go:151","msg":"点赞操作成功","user_id":0,"video_id":0,"action":true}
+{"level":"INFO","timestamp":"2026-02-23T21:51:10.784+0800","caller":"service/service.go:83","msg":"点赞操作请求","user_id":0,"video_id":0,"action":false}
+{"level":"INFO","timestamp":"2026-02-23T21:51:11.832+0800","caller":"service/service.go:151","msg":"点赞操作成功","user_id":0,"video_id":0,"action":false}
+{"level":"INFO","timestamp":"2026-02-23T21:52:16.584+0800","caller":"service/service.go:335","msg":"评论操作请求","user_id":0,"video_id":0,"content":"","reply_to_id":0}
+{"level":"INFO","timestamp":"2026-02-23T21:55:31.754+0800","caller":"service/service.go:390","msg":"获取评论列表请求","video_id":1,"current_user_id":0,"page":1,"page_size":10}
+{"level":"INFO","timestamp":"2026-02-23T21:55:31.779+0800","caller":"service/service.go:404","msg":"获取评论列表成功","video_id":1,"comment_count":0,"total_count":0}
+{"level":"INFO","timestamp":"2026-02-23T21:55:52.679+0800","caller":"service/service.go:390","msg":"获取评论列表请求","video_id":1,"current_user_id":0,"page":1,"page_size":10}
+{"level":"INFO","timestamp":"2026-02-23T21:55:52.703+0800","caller":"service/service.go:404","msg":"获取评论列表成功","video_id":1,"comment_count":0,"total_count":0}

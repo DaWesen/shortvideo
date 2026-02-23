@@ -1,0 +1,13 @@
+{"level":"INFO","timestamp":"2026-02-23T21:58:42.526+0800","caller":"handler/handler.go:55","msg":"StartLive request","host_id":0,"room_id":0}
+{"level":"INFO","timestamp":"2026-02-23T21:58:42.526+0800","caller":"service/service.go:167","msg":"开始直播请求","host_id":0,"room_id":0}
+{"level":"WARN","timestamp":"2026-02-23T21:58:42.537+0800","caller":"service/service.go:180","msg":"直播间不存在","room_id":0}
+{"level":"ERROR","timestamp":"2026-02-23T21:58:42.538+0800","caller":"handler/handler.go:69","msg":"StartLive failed","error":"直播间不存在"}
+{"level":"INFO","timestamp":"2026-02-23T21:59:23.594+0800","caller":"handler/handler.go:82","msg":"StopLive request","host_id":0,"room_id":0}
+{"level":"INFO","timestamp":"2026-02-23T21:59:23.596+0800","caller":"service/service.go:246","msg":"停止直播请求","host_id":0,"room_id":0}
+{"level":"WARN","timestamp":"2026-02-23T21:59:23.609+0800","caller":"service/service.go:259","msg":"直播间不存在","room_id":0}
+{"level":"ERROR","timestamp":"2026-02-23T21:59:23.609+0800","caller":"handler/handler.go:96","msg":"StopLive failed","error":"直播间不存在"}
+{"level":"INFO","timestamp":"2026-02-23T21:59:56.067+0800","caller":"handler/handler.go:109","msg":"GetLiveRooms request","user_id":0,"page":1,"page_size":10}
+{"level":"INFO","timestamp":"2026-02-23T21:59:56.067+0800","caller":"service/service.go:322","msg":"获取直播列表请求","user_id":0,"page":1,"page_size":10,"following_only":false}
+{"level":"INFO","timestamp":"2026-02-23T21:59:56.091+0800","caller":"service/service.go:343","msg":"获取直播列表成功","user_id":0,"page":1,"page_size":10,"total":0}
+{"level":"INFO","timestamp":"2026-02-23T21:59:56.091+0800","caller":"handler/handler.go:141","msg":"GetLiveRooms success","room_count":0,"total":0}
+{"level":"INFO","timestamp":"2026-02-23T22:08:38.042+0800","caller":"live/main.go:108","msg":"Live server started successfully"}

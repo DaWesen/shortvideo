@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net"
 	"shortvideo/internal/message/dao"
 	"shortvideo/internal/message/handler"
 	"shortvideo/internal/message/service"
@@ -86,6 +87,7 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 			ServiceName: "message",
 		}),
+		server.WithServiceAddr(&net.TCPAddr{Port: cfg.Ports.Message}),
 	}
 
 	//创建服务

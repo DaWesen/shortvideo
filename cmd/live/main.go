@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net"
 
 	"shortvideo/internal/live/dao"
 	"shortvideo/internal/live/handler"
@@ -53,7 +54,7 @@ func main() {
 	}
 
 	//初始化Prometheus监控
-	_, err = prometheus.NewPrometheusManager()
+	_, err = prometheus.NewPrometheusManager(cfg.Prometheus.LivePort)
 	if err != nil {
 		log.Printf("初始化Prometheus失败: %v，服务将继续运行", err)
 	}
@@ -90,6 +91,7 @@ func main() {
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 			ServiceName: "live",
 		}),
+		server.WithServiceAddr(&net.TCPAddr{Port: cfg.Ports.Live}),
 	}
 
 	//创建服务器

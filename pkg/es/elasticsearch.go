@@ -24,8 +24,8 @@ type ESManager struct {
 }
 
 type IndexMapping struct {
-	Settings IndexSettings                `json:"settings"`
-	Mappings map[string]PropertiesMapping `json:"mappings,omitempty"`
+	Settings IndexSettings     `json:"settings"`
+	Mappings PropertiesMapping `json:"mappings,omitempty"`
 }
 
 type IndexSettings struct {
@@ -130,6 +130,13 @@ func (es *ESManager) CreateIndex(indexName string, mapping IndexMapping) error {
 	defer resp.Body.Close()
 
 	if resp.IsError() {
+		// 读取并打印详细的错误信息
+		var errorBody map[string]interface{}
+		if err := json.NewDecoder(resp.Body).Decode(&errorBody); err != nil {
+			log.Printf("解析错误响应失败: %v", err)
+		} else {
+			log.Printf("索引创建失败详情: %v", errorBody)
+		}
 		return fmt.Errorf("创建索引失败: %s", resp.Status())
 	}
 
@@ -311,54 +318,50 @@ func GenerateVideoMapping() IndexMapping {
 			NumberOfShards:   1,
 			NumberOfReplicas: 0,
 		},
-		Mappings: map[string]PropertiesMapping{
-			"_doc": {
-				Properties: map[string]PropertyMapping{
-					"id": {
-						Type: "long",
-					},
-					"user_id": {
-						Type: "long",
-					},
-					"title": {
-						Type:     "text",
-						Analyzer: "ik_max_word",
-						Fields: map[string]interface{}{
-							"keyword": map[string]interface{}{
-								"type":         "keyword",
-								"ignore_above": 256,
-							},
+		Mappings: PropertiesMapping{
+			Properties: map[string]PropertyMapping{
+				"id": {
+					Type: "long",
+				},
+				"user_id": {
+					Type: "long",
+				},
+				"title": {
+					Type: "text",
+					Fields: map[string]interface{}{
+						"keyword": map[string]interface{}{
+							"type":         "keyword",
+							"ignore_above": 256,
 						},
 					},
-					"description": {
-						Type:     "text",
-						Analyzer: "ik_max_word",
-					},
-					"cover_url": {
-						Type: "keyword",
-					},
-					"video_url": {
-						Type: "keyword",
-					},
-					"tags": {
-						Type: "keyword",
-					},
-					"view_count": {
-						Type: "long",
-					},
-					"like_count": {
-						Type: "long",
-					},
-					"comment_count": {
-						Type: "long",
-					},
-					"share_count": {
-						Type: "long",
-					},
-					"created_at": {
-						Type:   "date",
-						Format: "yyyy-MM-dd HH:mm:ss",
-					},
+				},
+				"description": {
+					Type: "text",
+				},
+				"cover_url": {
+					Type: "keyword",
+				},
+				"video_url": {
+					Type: "keyword",
+				},
+				"tags": {
+					Type: "keyword",
+				},
+				"view_count": {
+					Type: "long",
+				},
+				"like_count": {
+					Type: "long",
+				},
+				"comment_count": {
+					Type: "long",
+				},
+				"share_count": {
+					Type: "long",
+				},
+				"created_at": {
+					Type:   "date",
+					Format: "yyyy-MM-dd HH:mm:ss",
 				},
 			},
 		},
@@ -372,32 +375,29 @@ func GenerateUserMapping() IndexMapping {
 			NumberOfShards:   1,
 			NumberOfReplicas: 0,
 		},
-		Mappings: map[string]PropertiesMapping{
-			"_doc": {
-				Properties: map[string]PropertyMapping{
-					"id": {
-						Type: "long",
-					},
-					"username": {
-						Type: "keyword",
-					},
-					"avatar": {
-						Type: "keyword",
-					},
-					"about": {
-						Type:     "text",
-						Analyzer: "ik_max_word",
-					},
-					"follow_count": {
-						Type: "long",
-					},
-					"follower_count": {
-						Type: "long",
-					},
-					"created_at": {
-						Type:   "date",
-						Format: "yyyy-MM-dd HH:mm:ss",
-					},
+		Mappings: PropertiesMapping{
+			Properties: map[string]PropertyMapping{
+				"id": {
+					Type: "long",
+				},
+				"username": {
+					Type: "keyword",
+				},
+				"avatar": {
+					Type: "keyword",
+				},
+				"about": {
+					Type: "text",
+				},
+				"follow_count": {
+					Type: "long",
+				},
+				"follower_count": {
+					Type: "long",
+				},
+				"created_at": {
+					Type:   "date",
+					Format: "yyyy-MM-dd HH:mm:ss",
 				},
 			},
 		},
@@ -411,38 +411,35 @@ func GenerateLiveMapping() IndexMapping {
 			NumberOfShards:   1,
 			NumberOfReplicas: 0,
 		},
-		Mappings: map[string]PropertiesMapping{
-			"_doc": {
-				Properties: map[string]PropertyMapping{
-					"id": {
-						Type: "long",
-					},
-					"host_id": {
-						Type: "long",
-					},
-					"title": {
-						Type:     "text",
-						Analyzer: "ik_max_word",
-						Fields: map[string]interface{}{
-							"keyword": map[string]interface{}{
-								"type":         "keyword",
-								"ignore_above": 256,
-							},
+		Mappings: PropertiesMapping{
+			Properties: map[string]PropertyMapping{
+				"id": {
+					Type: "long",
+				},
+				"host_id": {
+					Type: "long",
+				},
+				"title": {
+					Type: "text",
+					Fields: map[string]interface{}{
+						"keyword": map[string]interface{}{
+							"type":         "keyword",
+							"ignore_above": 256,
 						},
 					},
-					"cover_url": {
-						Type: "keyword",
-					},
-					"viewer_count": {
-						Type: "long",
-					},
-					"is_live": {
-						Type: "boolean",
-					},
-					"created_at": {
-						Type:   "date",
-						Format: "yyyy-MM-dd HH:mm:ss",
-					},
+				},
+				"cover_url": {
+					Type: "keyword",
+				},
+				"viewer_count": {
+					Type: "long",
+				},
+				"is_live": {
+					Type: "boolean",
+				},
+				"created_at": {
+					Type:   "date",
+					Format: "yyyy-MM-dd HH:mm:ss",
 				},
 			},
 		},
