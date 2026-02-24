@@ -336,29 +336,6 @@ func (p *PostgresConfig) GetDSN() string {
 		p.Host, p.Port, p.User, p.Password, p.DBName, p.SSLMode)
 }
 
-// 获取Redis地址
-func (r *RedisConfig) GetAddr() string {
-	return fmt.Sprintf("%s:%d", r.Host, r.Port)
-}
-
-// 获取MinIO端点
-func (m *MinioConfig) GetEndpoint() string {
-	if m.UseSSL {
-		return "https://" + m.Endpoint
-	}
-	return "http://" + m.Endpoint
-}
-
-// 是否为开发环境
-func (a *AppConfig) IsDev() bool {
-	return a.Env == "dev" || a.Env == "development"
-}
-
-// 是否为生产环境
-func (a *AppConfig) IsProd() bool {
-	return a.Env == "prod" || a.Env == "production"
-}
-
 // Etcd配置
 type EtcdConfig struct {
 	Endpoints    []string `mapstructure:"endpoints"`

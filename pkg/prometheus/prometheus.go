@@ -42,7 +42,7 @@ func NewPrometheusManager(port ...int) (*PrometheusManager, error) {
 
 		//如果启用了Prometheus，则启动HTTP服务器
 		if cfg.Enable {
-			// 使用提供的端口，如果没有提供则使用配置中的默认端口
+			//使用提供的端口，如果没有提供则使用配置中的默认端口
 			promPort := cfg.Port
 			if len(port) > 0 && port[0] > 0 {
 				promPort = port[0]
