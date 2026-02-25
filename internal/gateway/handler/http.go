@@ -60,7 +60,7 @@ func (h *HTTPHandler) writeResponse(ctx *app.RequestContext, resp Response) {
 	ctx.JSON(resp.Code, resp)
 }
 
-// 用户注册
+// 注册
 func (h *HTTPHandler) Register(c context.Context, ctx *app.RequestContext) {
 	var req struct {
 		Username string `json:"username"`
@@ -96,13 +96,22 @@ func (h *HTTPHandler) Register(c context.Context, ctx *app.RequestContext) {
 		return
 	}
 
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "注册失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
+		return
+	}
+
 	h.success(ctx, map[string]interface{}{
 		"user":  resp.User,
 		"token": resp.Token,
 	})
 }
 
-// 用户登录
+// 登录
 func (h *HTTPHandler) Login(c context.Context, ctx *app.RequestContext) {
 	var req struct {
 		Username string `json:"username"`
@@ -126,6 +135,15 @@ func (h *HTTPHandler) Login(c context.Context, ctx *app.RequestContext) {
 	resp, err := h.clients.UserClient.Login(c, loginReq)
 	if err != nil {
 		h.error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "登录失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
 		return
 	}
 
