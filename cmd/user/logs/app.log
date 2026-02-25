@@ -21,3 +21,10 @@
 {"level":"WARN","timestamp":"2026-02-25T15:20:51.026+0800","caller":"service/service.go:111","msg":"用户名已存在","username":"testuser"}
 {"level":"INFO","timestamp":"2026-02-25T15:22:19.595+0800","caller":"service/service.go:237","msg":"获取用户信息请求","user_id":0}
 {"level":"WARN","timestamp":"2026-02-25T15:22:19.616+0800","caller":"service/service.go:261","msg":"用户不存在","user_id":0}
+{"level":"INFO","timestamp":"2026-02-25T15:26:21.859+0800","caller":"service/service.go:99","msg":"用户注册请求","username":"testuser","about":""}
+{"level":"WARN","timestamp":"2026-02-25T15:26:21.872+0800","caller":"service/service.go:111","msg":"用户名已存在","username":"testuser"}
+{"level":"INFO","timestamp":"2026-02-25T15:26:27.461+0800","caller":"service/service.go:99","msg":"用户注册请求","username":"testuser","about":"This is a test user"}
+{"level":"WARN","timestamp":"2026-02-25T15:26:27.472+0800","caller":"service/service.go:111","msg":"用户名已存在","username":"testuser"}
+{"level":"INFO","timestamp":"2026-02-25T15:26:54.367+0800","caller":"service/service.go:99","msg":"用户注册请求","username":"lmx","about":"This is a test user"}
+{"level":"INFO","timestamp":"2026-02-25T15:26:55.480+0800","caller":"service/service.go:154","msg":"发送用户注册事件","user_id":2}
+{"level":"INFO","timestamp":"2026-02-25T15:26:55.667+0800","caller":"service/service.go:177","msg":"用户注册成功","user_id":2,"username":"lmx"}

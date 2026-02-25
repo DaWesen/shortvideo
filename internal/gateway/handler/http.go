@@ -181,6 +181,15 @@ func (h *HTTPHandler) GetVideoFeed(c context.Context, ctx *app.RequestContext) {
 		return
 	}
 
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "获取视频流失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
+		return
+	}
+
 	h.success(ctx, map[string]interface{}{
 		"videos":    resp.Videos,
 		"next_time": resp.NextTime,
@@ -210,6 +219,15 @@ func (h *HTTPHandler) GetVideoByID(c context.Context, ctx *app.RequestContext) {
 	resp, err := h.clients.VideoClient.GetVideoDetail(c, detailReq)
 	if err != nil {
 		h.error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "获取视频详情失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
 		return
 	}
 
@@ -249,6 +267,15 @@ func (h *HTTPHandler) Search(c context.Context, ctx *app.RequestContext) {
 		return
 	}
 
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "搜索视频失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
+		return
+	}
+
 	h.success(ctx, map[string]interface{}{
 		"videos": resp.Videos,
 		"total":  resp.TotalCount,
@@ -274,6 +301,15 @@ func (h *HTTPHandler) GetUserProfile(c context.Context, ctx *app.RequestContext)
 	resp, err := h.clients.UserClient.GetUserInfo(c, infoReq)
 	if err != nil {
 		h.error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "获取用户信息失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
 		return
 	}
 
@@ -317,9 +353,18 @@ func (h *HTTPHandler) UpdateUser(c context.Context, ctx *app.RequestContext) {
 		updateReq.NewPassword_ = &req.NewPassword
 	}
 
-	_, err := h.clients.UserClient.UpdateUser(c, updateReq)
+	resp, err := h.clients.UserClient.UpdateUser(c, updateReq)
 	if err != nil {
 		h.error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if resp.StatusCode != 0 {
+		errMsg := "更新用户信息失败"
+		if resp.Msg != nil {
+			errMsg = *resp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
 		return
 	}
 
@@ -349,9 +394,18 @@ func (h *HTTPHandler) FollowUser(c context.Context, ctx *app.RequestContext) {
 		Action:       true,
 	}
 
-	_, err := h.clients.SocialClient.FollowAction(c, followReq)
+	resp, err := h.clients.SocialClient.FollowAction(c, followReq)
 	if err != nil {
 		h.error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if resp.BaseResp.StatusCode != 0 {
+		errMsg := "关注用户失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
 		return
 	}
 
@@ -381,9 +435,18 @@ func (h *HTTPHandler) UnfollowUser(c context.Context, ctx *app.RequestContext) {
 		Action:       false,
 	}
 
-	_, err := h.clients.SocialClient.FollowAction(c, followReq)
+	resp, err := h.clients.SocialClient.FollowAction(c, followReq)
 	if err != nil {
 		h.error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if resp.BaseResp.StatusCode != 0 {
+		errMsg := "取消关注失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
 		return
 	}
 
@@ -420,6 +483,15 @@ func (h *HTTPHandler) GetFollowingList(c context.Context, ctx *app.RequestContex
 		return
 	}
 
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "获取关注列表失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
+		return
+	}
+
 	h.success(ctx, resp.Users)
 }
 
@@ -453,6 +525,15 @@ func (h *HTTPHandler) GetFollowerList(c context.Context, ctx *app.RequestContext
 		return
 	}
 
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "获取粉丝列表失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
+		return
+	}
+
 	h.success(ctx, resp.Users)
 }
 
@@ -479,9 +560,18 @@ func (h *HTTPHandler) LikeVideo(c context.Context, ctx *app.RequestContext) {
 		Action:  true,
 	}
 
-	_, err := h.clients.InteractionClient.LikeAction(c, likeReq)
+	resp, err := h.clients.InteractionClient.LikeAction(c, likeReq)
 	if err != nil {
 		h.error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if resp.BaseResp.StatusCode != 0 {
+		errMsg := "点赞失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
 		return
 	}
 
@@ -511,9 +601,18 @@ func (h *HTTPHandler) UnlikeVideo(c context.Context, ctx *app.RequestContext) {
 		Action:  false,
 	}
 
-	_, err := h.clients.InteractionClient.LikeAction(c, likeReq)
+	resp, err := h.clients.InteractionClient.LikeAction(c, likeReq)
 	if err != nil {
 		h.error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if resp.BaseResp.StatusCode != 0 {
+		errMsg := "取消点赞失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
 		return
 	}
 
@@ -547,6 +646,15 @@ func (h *HTTPHandler) CommentVideo(c context.Context, ctx *app.RequestContext) {
 	resp, err := h.clients.InteractionClient.CommentAction(c, commentReq)
 	if err != nil {
 		h.error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "评论失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
 		return
 	}
 
@@ -588,6 +696,15 @@ func (h *HTTPHandler) GetComments(c context.Context, ctx *app.RequestContext) {
 		return
 	}
 
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "获取评论列表失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
+		return
+	}
+
 	h.success(ctx, resp.Comments)
 }
 
@@ -621,6 +738,15 @@ func (h *HTTPHandler) SendMessage(c context.Context, ctx *app.RequestContext) {
 		return
 	}
 
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "发送消息失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
+		return
+	}
+
 	h.success(ctx, map[string]interface{}{
 		"message_id": resp.MessageId,
 	})
@@ -644,6 +770,15 @@ func (h *HTTPHandler) GetMessageList(c context.Context, ctx *app.RequestContext)
 	resp, err := h.clients.MessageClient.GetChatHistory(c, messageReq)
 	if err != nil {
 		h.error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "获取消息列表失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
 		return
 	}
 
@@ -674,9 +809,18 @@ func (h *HTTPHandler) StartLive(c context.Context, ctx *app.RequestContext) {
 		RtmpUrl: req.RtmpUrl,
 	}
 
-	_, err := h.clients.LiveClient.StartLive(c, startReq)
+	resp, err := h.clients.LiveClient.StartLive(c, startReq)
 	if err != nil {
 		h.error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if resp.BaseResp.StatusCode != 0 {
+		errMsg := "开始直播失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
 		return
 	}
 
@@ -705,9 +849,18 @@ func (h *HTTPHandler) StopLive(c context.Context, ctx *app.RequestContext) {
 		RoomId: req.RoomId,
 	}
 
-	_, err := h.clients.LiveClient.StopLive(c, stopReq)
+	resp, err := h.clients.LiveClient.StopLive(c, stopReq)
 	if err != nil {
 		h.error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if resp.BaseResp.StatusCode != 0 {
+		errMsg := "停止直播失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
 		return
 	}
 
@@ -741,6 +894,15 @@ func (h *HTTPHandler) GetLiveList(c context.Context, ctx *app.RequestContext) {
 	resp, err := h.clients.LiveClient.GetLiveRooms(c, liveReq)
 	if err != nil {
 		h.error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "获取直播列表失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
 		return
 	}
 
@@ -786,6 +948,15 @@ func (h *HTTPHandler) SendDanmu(c context.Context, ctx *app.RequestContext) {
 		return
 	}
 
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "发送弹幕失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
+		return
+	}
+
 	h.success(ctx, map[string]interface{}{
 		"danmu_id": resp.DanmuId,
 	})
@@ -814,6 +985,15 @@ func (h *HTTPHandler) GetDanmuList(c context.Context, ctx *app.RequestContext) {
 		return
 	}
 
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "获取弹幕列表失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
+		return
+	}
+
 	h.success(ctx, resp.Danmus)
 }
 
@@ -839,6 +1019,15 @@ func (h *HTTPHandler) GetRecommendedVideos(c context.Context, ctx *app.RequestCo
 	resp, err := h.clients.RecommendClient.GetRecommendVideos(c, recommendReq)
 	if err != nil {
 		h.error(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if resp.BaseResp != nil && resp.BaseResp.StatusCode != 0 {
+		errMsg := "获取推荐视频失败"
+		if resp.BaseResp.Msg != nil {
+			errMsg = *resp.BaseResp.Msg
+		}
+		h.error(ctx, http.StatusBadRequest, errMsg)
 		return
 	}
 

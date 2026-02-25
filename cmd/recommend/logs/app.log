@@ -3,3 +3,4 @@
 {"level":"INFO","timestamp":"2026-02-23T22:02:31.337+0800","caller":"service/service.go:106","msg":"GetRecommendVideos success","user_id":0,"video_count":0,"next_offset":0}
 {"level":"INFO","timestamp":"2026-02-23T22:02:31.337+0800","caller":"handler/handler.go:50","msg":"GetRecommendVideos success","user_id":0,"video_count":0,"next_offset":0}
 {"level":"INFO","timestamp":"2026-02-23T22:08:38.042+0800","caller":"recommend/main.go:74","msg":"Recommend server started successfully"}
+{"level":"INFO","timestamp":"2026-02-25T15:30:07.985+0800","caller":"recommend/main.go:74","msg":"Recommend server started successfully"}
