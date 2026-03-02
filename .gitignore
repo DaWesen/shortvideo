@@ -53,6 +53,6 @@ docker-compose.override.yml
 # Kubernetes
 *.yaml
 *.yml
-
+!docker-compose.yml
 # Generated code
 kitex_gen/
