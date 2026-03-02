@@ -28,3 +28,29 @@
 {"level":"INFO","timestamp":"2026-02-25T15:26:54.367+0800","caller":"service/service.go:99","msg":"用户注册请求","username":"lmx","about":"This is a test user"}
 {"level":"INFO","timestamp":"2026-02-25T15:26:55.480+0800","caller":"service/service.go:154","msg":"发送用户注册事件","user_id":2}
 {"level":"INFO","timestamp":"2026-02-25T15:26:55.667+0800","caller":"service/service.go:177","msg":"用户注册成功","user_id":2,"username":"lmx"}
+{"level":"INFO","timestamp":"2026-02-25T17:05:38.660+0800","caller":"service/service.go:99","msg":"用户注册请求","username":"lmx","about":"This is a test user"}
+{"level":"WARN","timestamp":"2026-02-25T17:05:38.677+0800","caller":"service/service.go:111","msg":"用户名已存在","username":"lmx"}
+{"level":"INFO","timestamp":"2026-02-25T17:05:55.453+0800","caller":"service/service.go:99","msg":"用户注册请求","username":"lmx","about":""}
+{"level":"WARN","timestamp":"2026-02-25T17:05:55.468+0800","caller":"service/service.go:111","msg":"用户名已存在","username":"lmx"}
+{"level":"INFO","timestamp":"2026-02-25T17:07:25.541+0800","caller":"service/service.go:99","msg":"用户注册请求","username":"lmx","about":"This is a test user"}
+{"level":"WARN","timestamp":"2026-02-25T17:07:25.557+0800","caller":"service/service.go:111","msg":"用户名已存在","username":"lmx"}
+{"level":"INFO","timestamp":"2026-02-25T17:07:27.908+0800","caller":"service/service.go:99","msg":"用户注册请求","username":"lmx","about":""}
+{"level":"WARN","timestamp":"2026-02-25T17:07:27.922+0800","caller":"service/service.go:111","msg":"用户名已存在","username":"lmx"}
+{"level":"INFO","timestamp":"2026-02-25T17:07:33.452+0800","caller":"service/service.go:99","msg":"用户注册请求","username":"21","about":"This is a test user"}
+{"level":"INFO","timestamp":"2026-02-25T17:07:34.551+0800","caller":"service/service.go:154","msg":"发送用户注册事件","user_id":3}
+{"level":"INFO","timestamp":"2026-02-25T17:07:34.646+0800","caller":"service/service.go:177","msg":"用户注册成功","user_id":3,"username":"21"}
+{"level":"INFO","timestamp":"2026-02-25T17:07:43.321+0800","caller":"service/service.go:99","msg":"用户注册请求","username":"lmx","about":""}
+{"level":"WARN","timestamp":"2026-02-25T17:07:43.336+0800","caller":"service/service.go:111","msg":"用户名已存在","username":"lmx"}
+{"level":"INFO","timestamp":"2026-02-25T17:07:46.326+0800","caller":"service/service.go:99","msg":"用户注册请求","username":"lmx","about":""}
+{"level":"WARN","timestamp":"2026-02-25T17:07:46.348+0800","caller":"service/service.go:111","msg":"用户名已存在","username":"lmx"}
+{"level":"INFO","timestamp":"2026-02-25T17:07:56.023+0800","caller":"service/service.go:99","msg":"用户注册请求","username":"lmx","about":""}
+{"level":"WARN","timestamp":"2026-02-25T17:07:56.033+0800","caller":"service/service.go:111","msg":"用户名已存在","username":"lmx"}
+{"level":"INFO","timestamp":"2026-02-25T17:09:30.365+0800","caller":"service/service.go:186","msg":"用户登录请求","username":"lmx"}
+{"level":"INFO","timestamp":"2026-02-25T17:09:31.436+0800","caller":"service/service.go:224","msg":"发送用户登录事件","user_id":2}
+{"level":"INFO","timestamp":"2026-02-25T17:09:31.436+0800","caller":"service/service.go:228","msg":"用户登录成功","user_id":2,"username":"lmx"}
+{"level":"INFO","timestamp":"2026-02-25T17:35:51.772+0800","caller":"service/service.go:99","msg":"用户注册请求","username":"lmx666","about":"This is a test user"}
+{"level":"INFO","timestamp":"2026-02-25T17:35:52.860+0800","caller":"service/service.go:154","msg":"发送用户注册事件","user_id":4}
+{"level":"INFO","timestamp":"2026-02-25T17:35:52.929+0800","caller":"service/service.go:177","msg":"用户注册成功","user_id":4,"username":"lmx666"}
+{"level":"INFO","timestamp":"2026-02-25T17:36:02.565+0800","caller":"service/service.go:186","msg":"用户登录请求","username":"lmx666"}
+{"level":"INFO","timestamp":"2026-02-25T17:36:03.628+0800","caller":"service/service.go:224","msg":"发送用户登录事件","user_id":4}
+{"level":"INFO","timestamp":"2026-02-25T17:36:03.629+0800","caller":"service/service.go:228","msg":"用户登录成功","user_id":4,"username":"lmx666"}

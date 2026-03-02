@@ -11,3 +11,17 @@
 {"level":"INFO","timestamp":"2026-02-23T21:59:56.091+0800","caller":"service/service.go:343","msg":"获取直播列表成功","user_id":0,"page":1,"page_size":10,"total":0}
 {"level":"INFO","timestamp":"2026-02-23T21:59:56.091+0800","caller":"handler/handler.go:141","msg":"GetLiveRooms success","room_count":0,"total":0}
 {"level":"INFO","timestamp":"2026-02-23T22:08:38.042+0800","caller":"live/main.go:108","msg":"Live server started successfully"}
+{"level":"INFO","timestamp":"2026-02-25T16:38:20.272+0800","caller":"handler/handler.go:55","msg":"StartLive request","host_id":0,"room_id":0}
+{"level":"INFO","timestamp":"2026-02-25T16:38:20.272+0800","caller":"service/service.go:167","msg":"开始直播请求","host_id":0,"room_id":0}
+{"level":"WARN","timestamp":"2026-02-25T16:38:20.283+0800","caller":"service/service.go:180","msg":"直播间不存在","room_id":0}
+{"level":"ERROR","timestamp":"2026-02-25T16:38:20.284+0800","caller":"handler/handler.go:69","msg":"StartLive failed","error":"直播间不存在"}
+{"level":"INFO","timestamp":"2026-02-25T17:36:31.164+0800","caller":"handler/handler.go:55","msg":"StartLive request","host_id":0,"room_id":0}
+{"level":"INFO","timestamp":"2026-02-25T17:36:31.165+0800","caller":"service/service.go:167","msg":"开始直播请求","host_id":0,"room_id":0}
+{"level":"WARN","timestamp":"2026-02-25T17:36:31.179+0800","caller":"service/service.go:180","msg":"直播间不存在","room_id":0}
+{"level":"ERROR","timestamp":"2026-02-25T17:36:31.179+0800","caller":"handler/handler.go:69","msg":"StartLive failed","error":"直播间不存在"}
+{"level":"INFO","timestamp":"2026-02-26T19:50:29.152+0800","caller":"live/main.go:108","msg":"Live server started successfully"}
+{"level":"INFO","timestamp":"2026-02-26T19:52:29.781+0800","caller":"handler/handler.go:55","msg":"StartLive request","host_id":0,"room_id":0}
+{"level":"INFO","timestamp":"2026-02-26T19:52:29.781+0800","caller":"service/service.go:167","msg":"开始直播请求","host_id":0,"room_id":0}
+{"level":"WARN","timestamp":"2026-02-26T19:52:29.801+0800","caller":"service/service.go:180","msg":"直播间不存在","room_id":0}
+{"level":"ERROR","timestamp":"2026-02-26T19:52:29.803+0800","caller":"handler/handler.go:69","msg":"StartLive failed","error":"直播间不存在"}
+{"level":"INFO","timestamp":"2026-02-26T20:54:06.388+0800","caller":"live/main.go:108","msg":"Live server started successfully"}

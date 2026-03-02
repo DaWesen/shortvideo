@@ -6,3 +6,11 @@
 {"level":"INFO","timestamp":"2026-02-23T22:01:30.927+0800","caller":"service/service.go:121","msg":"GetDanmuHistory success","danmu_count":0}
 {"level":"INFO","timestamp":"2026-02-23T22:01:30.927+0800","caller":"handler/handler.go:88","msg":"GetDanmuHistory success","danmu_count":0}
 {"level":"INFO","timestamp":"2026-02-23T22:08:38.042+0800","caller":"danmu/main.go:71","msg":"Danmu server started successfully"}
+{"level":"INFO","timestamp":"2026-02-25T17:24:07.531+0800","caller":"handler/handler.go:25","msg":"SendDanmu request","user_id":0,"live_id":123,"content":"弹幕内容"}
+{"level":"INFO","timestamp":"2026-02-25T17:24:07.531+0800","caller":"service/service.go:69","msg":"SendDanmu request","user_id":0,"live_id":123,"content":"弹幕内容"}
+{"level":"INFO","timestamp":"2026-02-25T17:24:07.547+0800","caller":"service/service.go:95","msg":"SendDanmu success","danmu_id":1}
+{"level":"INFO","timestamp":"2026-02-25T17:24:07.547+0800","caller":"handler/handler.go:49","msg":"SendDanmu success","danmu_id":1}
+{"level":"INFO","timestamp":"2026-02-25T17:36:24.711+0800","caller":"handler/handler.go:25","msg":"SendDanmu request","user_id":0,"live_id":123,"content":"弹幕内容"}
+{"level":"INFO","timestamp":"2026-02-25T17:36:24.712+0800","caller":"service/service.go:69","msg":"SendDanmu request","user_id":0,"live_id":123,"content":"弹幕内容"}
+{"level":"INFO","timestamp":"2026-02-25T17:36:24.729+0800","caller":"service/service.go:95","msg":"SendDanmu success","danmu_id":2}
+{"level":"INFO","timestamp":"2026-02-25T17:36:24.729+0800","caller":"handler/handler.go:49","msg":"SendDanmu success","danmu_id":2}
